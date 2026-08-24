@@ -1,0 +1,288 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Long';
+  src: url('/fonts/long.woff');
+}
+
+@font-face {
+  font-family: 'Round';
+  src: url('/fonts/round.woff');
+}
+
+@font-face {
+  font-family: 'Round Bold';
+  font-weight: bold;
+  src: url('/fonts/round-bold.woff');
+}
+
+@theme {
+  --font-sans: 'Round', sans-serif;
+  --font-long: 'Long', sans-serif;
+  --font-round-bold: 'Round Bold', sans-serif;
+  --color-yellow: #fff9cb;
+  --color-pink: #ffb0c4;
+  --breakpoint-sm: 40rem;
+  --breakpoint-xs: 20rem;
+  --breakpoint-3xl: 120rem;
+}
+
+body {
+  width: 100dvw;
+  overflow-x: hidden;
+  font-family: 'Round', sans-serif;
+  background-color: black;
+}
+
+main {
+  background: linear-gradient(
+    223.17deg,
+    rgb(28, 24, 41) 0%,
+    rgb(27, 24, 40) 8.61%,
+    rgb(25, 23, 36) 17.21%,
+    rgb(22, 21, 32) 25.82%,
+    rgb(20, 19, 28) 34.42%,
+    rgb(18, 18, 24) 43.03%,
+    rgb(17, 17, 23) 51.63%
+  );
+}
+
+@layer utilities {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+  .abs-center {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+  }
+}
+
+@layer components {
+  .skip-link {
+    @apply absolute left-4 top-[-100%] z-[200] rounded bg-white px-4 py-2 text-black;
+  }
+
+  .skip-link:focus {
+    @apply top-4;
+  }
+
+  main {
+    @apply w-dvw overflow-x-hidden;
+  }
+
+  nav {
+    @apply fixed top-0 left-0 z-[100] flex w-full items-center justify-between p-5 md:p-16;
+  }
+
+  nav a,
+  nav button {
+    @apply border-0 bg-transparent p-0;
+  }
+
+  nav button {
+    @apply cursor-pointer;
+  }
+
+  .gradient-title {
+    @apply font-round-bold bg-gradient-to-r from-pink-400 via-red-400 to-orange-400 bg-clip-text text-center text-[5rem] leading-[4.5rem] font-extrabold text-transparent uppercase md:text-[8rem] md:leading-[7rem];
+  }
+
+  .hero-section {
+    @apply relative h-dvh w-dvw overflow-hidden;
+
+    .scale-out {
+      @apply h-full object-cover md:scale-125;
+    }
+    .title-logo {
+      @apply absolute top-0 h-full object-cover md:scale-125;
+    }
+    .trailer-logo {
+      @apply absolute -bottom-5 left-1/2 w-48 -translate-x-1/2;
+    }
+    .play-img {
+      @apply absolute top-1/2 left-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-white md:size-28;
+    }
+    .fake-logo-wrapper {
+      @apply absolute top-[9.5rem] left-1/2 z-50 -translate-x-1/2 sm:top-[12.8rem] md:top-[8.5rem] 2xl:top-44 3xl:top-48;
+    }
+    .overlay-logo {
+      @apply size-full w-60 object-cover opacity-0 md:w-60 2xl:w-72 3xl:w-80;
+    }
+  }
+
+  .first-vd-wrapper {
+    .first-vd {
+      @apply size-full object-cover [object-position:75%_center] md:[object-position:50%_center];
+    }
+  }
+
+  .entrance-message {
+    @apply absolute inset-0 z-20 h-dvh w-full overflow-hidden opacity-100;
+
+    .entrance-logo {
+      @apply absolute top-[9.5rem] left-1/2 w-48 -translate-x-1/2 md:top-[8.5rem] md:w-60 sm:top-[12.8rem] 2xl:top-44 2xl:w-72 3xl:top-48 3xl:w-80;
+    }
+
+    .text-wrapper {
+      @apply mt-40 md:mt-60 2xl:mt-44 3xl:top-48;
+    }
+  }
+
+  .jason {
+    @apply relative z-10 mt-60 flex w-dvw flex-col justify-between gap-5 overflow-x-hidden py-40 ps-10 lg:flex-row lg:ps-40 2xl:ps-80;
+
+    .character-name {
+      @apply font-long mb-20 text-8xl text-yellow uppercase;
+    }
+    .character-tagline {
+      @apply mb-7 pe-10 text-3xl text-pink md:pe-20 md:text-5xl;
+    }
+    p {
+      @apply pe-14 text-lg text-white md:pe-28 md:text-2xl;
+    }
+    .jason-1 {
+      @apply w-auto -translate-x-5 bg-yellow lg:h-[80vh];
+
+      img {
+        @apply size-full object-cover [object-position:5%_center] transition duration-700 ease-in-out hover:scale-[0.98];
+      }
+    }
+    .jason-2 {
+      @apply mt-20 h-[90vh] w-auto -translate-x-5 bg-yellow md:mt-36;
+
+      img {
+        @apply size-full object-cover [object-position:80%_center] transition duration-700 ease-in-out hover:scale-x-[0.97] hover:scale-y-[0.98];
+      }
+    }
+    .jason-3 {
+      @apply h-[50vh] w-auto -translate-x-5 bg-yellow md:w-[60%];
+
+      img {
+        @apply size-full object-cover [object-position:42%_center] transition duration-700 ease-in-out hover:scale-[0.97];
+      }
+    }
+  }
+
+  .lucia {
+    @apply relative;
+  }
+
+  .lucia-life {
+    @apply relative z-10 mt-60 flex w-dvw flex-col justify-between gap-5 overflow-x-hidden py-40 lg:flex-row;
+
+    .character-name {
+      @apply font-long mb-20 text-8xl text-yellow uppercase;
+    }
+    .character-tagline {
+      @apply mb-7 pe-10 text-3xl text-pink md:pe-20 md:text-5xl;
+    }
+    p {
+      @apply pe-14 text-lg text-white md:pe-28 md:text-2xl;
+    }
+    p:last-of-type {
+      @apply block md:hidden xl:block;
+    }
+    .lucia-1 {
+      @apply w-auto -translate-x-5 bg-yellow lg:h-[80vh];
+
+      img {
+        @apply size-full object-cover [object-position:85%_center] transition duration-700 ease-in-out hover:scale-[0.98];
+      }
+    }
+    .lucia-2 {
+      @apply my-20 w-[80%] translate-x-5 bg-yellow lg:h-[60vh] lg:w-[70%] lg:-translate-x-5 md:my-36;
+
+      img {
+        @apply size-full object-cover [object-position:50%_center] transition duration-700 ease-in-out hover:scale-x-[0.98] hover:scale-y-[0.98];
+      }
+    }
+    .lucia-3 {
+      @apply h-auto w-auto -translate-x-5 bg-yellow lg:h-[90vh] md:w-[60%];
+
+      img {
+        @apply size-full object-cover [object-position:62%_center] transition duration-700 ease-in-out hover:scale-x-[0.98] hover:scale-y-[0.99];
+      }
+    }
+  }
+
+  .post-card {
+    @apply relative flex items-center justify-center pb-80 shadow-2xl;
+
+    .animated-gradient-bg {
+      @apply absolute left-0 h-[220vh] w-full md:h-[200vh] md:-bottom-5/6 xl:-bottom-1/2;
+    }
+
+    .post-card-wrapper {
+      @apply relative mx-5 flex h-[30vh] w-full items-center justify-center overflow-hidden md:mx-12 md:h-[40vh] xl:mx-56 xl:h-[85vh];
+
+      video {
+        @apply h-full w-full object-cover 2xl:scale-x-105;
+      }
+
+      img {
+        @apply absolute z-10 h-full w-full;
+      }
+
+      button {
+        @apply absolute -bottom-28 left-1/2 w-2/3 -translate-x-1/2 cursor-pointer rounded-full bg-white px-5 py-4 text-lg md:bottom-16 md:w-fit md:px-7;
+      }
+    }
+  }
+
+  .final {
+    @apply relative h-dvh overflow-hidden;
+
+    .final-content {
+      @apply scale-110;
+    }
+  }
+
+  .final-message {
+    @apply absolute z-50 h-dvh w-full overflow-hidden opacity-100;
+  }
+}
+
+.black-gradient-bg {
+  background: linear-gradient(
+    223.17deg,
+    rgb(28, 24, 41) 0%,
+    rgb(27, 24, 40) 8.61%,
+    rgb(25, 23, 36) 17.21%,
+    rgb(22, 21, 32) 25.82%,
+    rgb(20, 19, 28) 34.42%,
+    rgb(18, 18, 24) 43.03%,
+    rgb(17, 17, 23) 51.63%
+  );
+}
+
+.entrance-message {
+  mask-image: radial-gradient(circle at 50% 100vh, black 0%, transparent 0%);
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+}
+
+.mask-wrapper {
+  mask-image: url('/images/hero/big-hero-text.svg');
+  mask-repeat: no-repeat;
+}
+
+.animated-gradient-bg {
+  background: linear-gradient(135deg, #1e2a52 0%, #6e4b91 100%);
+}
+
+.jason-content {
+  background: radial-gradient(ellipse, #111117 20%, transparent 70%);
+}
+
+.lucia-life-content {
+  background: radial-gradient(ellipse, #111117 20%, transparent 70%);
+}
+
+
+.second-vd {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
