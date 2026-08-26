@@ -1,0 +1,27 @@
+# Grand Theft Auto VI
+
+> Landing page for Grand Theft Auto VI, the next entry in the Grand Theft Auto series by Rockstar Games, coming November 19, 2026 to PlayStation 5 and Xbox Series X|S.
+
+Vice City, USA. Jason and Lucia have always known the deck is stacked against them. But when an easy score goes wrong, they find themselves on the darkest side of the sunniest place in America, in the middle of a criminal conspiracy stretching across the state of Leonida — forced to rely on each other more than ever if they want to make it out alive.
+
+This site is a single-page marketing experience: a masked hero reveal, trailer highlights, character introductions for Jason and Lucia, and the release date block.
+
+## Game facts
+
+- [Release date](https://www.rockstargames.com/VI): November 19, 2026
+- [Platforms](https://www.xbox.com/en-US/games/grand-theft-auto-vi): PlayStation 5 and Xbox Series X|S
+- [Publisher](https://www.rockstargames.com/): Rockstar Games
+- Setting: Vice City and the state of Leonida
+- Protagonists: Jason and Lucia
+- Play mode: single-player
+
+## Official sources
+
+- [Grand Theft Auto VI official page](https://www.rockstargames.com/VI): official game site with trailers and artwork
+- [Launch date announcement](https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026): Rockstar Newswire post confirming November 19, 2026
+- [Xbox store listing](https://www.xbox.com/en-US/games/grand-theft-auto-vi): platform listing and game details
+
+## Notes
+
+- This is an unofficial fan-built landing page created as a front-end demo.
+- All trademarks and artwork belong to Rockstar Games.

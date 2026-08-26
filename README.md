@@ -1,6 +1,12 @@
 # GTA VI Landing
 
-Production-oriented Vue landing scaffold (Vue 3 + TypeScript + Tailwind CSS v4 + GSAP).
+Production-oriented Vue landing (Vue 3 + TypeScript + Tailwind CSS v4 + GSAP).
+
+## Specification
+
+Per-screen requirements (English and Russian), including Hero layers, scroll sequence, and what the radial mask is for:
+
+- **[docs/screens-spec.md](docs/screens-spec.md)**
 
 ## Stack
 
@@ -25,13 +31,14 @@ npm run type-check
 
 ```text
 src/
-  assets/      # global styles and static imports
-  components/  # reusable UI
-  sections/    # page sections (Hero, Video, etc.)
-  composables/ # shared Vue logic (e.g. GSAP helpers)
+  main.css       # global styles (Tailwind + section layout)
+  components/    # reusable UI
+  sections/      # page sections (Hero, Video, etc.)
+  composables/   # shared Vue logic (e.g. GSAP helpers)
   App.vue
   main.ts
-public/        # fonts, images, videos served as-is
+public/          # fonts, images (per section), videos
+docs/            # product spec
 ```
 
 ## Dev server

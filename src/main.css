@@ -266,6 +266,10 @@ main {
 .mask-wrapper {
   mask-image: url('/images/hero/big-hero-text.svg');
   mask-repeat: no-repeat;
+  /* mask-image creates a stacking context, so the play button can only be
+     lifted above .entrance-message (z-20) through this wrapper */
+  position: relative;
+  z-index: 30;
 }
 
 .animated-gradient-bg {
