@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
 import { useHeroMaskSettings } from '@/composables/useHeroMaskSettings'
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import ComingSoon from './ComingSoon.vue'
@@ -13,7 +12,6 @@ const playIcon = ref<HTMLImageElement | null>(null)
 let layoutCtx: gsap.Context | undefined
 let animationCtx: gsap.Context | undefined
 let playBounce: gsap.core.Timeline | undefined
-gsap.registerPlugin(ScrollTrigger)
 
 const bouncePlayIcon = () => {
   if (prefersReducedMotion.value) return
