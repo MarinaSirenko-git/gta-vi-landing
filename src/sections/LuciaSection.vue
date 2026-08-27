@@ -1,7 +1,84 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
+  import { useViewportWidth } from '@/composables/useViewportWidth'
+  import gsap from 'gsap'
+  import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+
+  const { prefersReducedMotion } = usePrefersReducedMotion()
+  const { width } = useViewportWidth()
+  let ctx: gsap.Context | undefined
+
+  const luciaSection = ref<HTMLElement | null>(null)
+
+  const isMobile = computed(() => width.value <= 768)
+
+  const killAnimations = () => {
+    ctx?.revert()
+    ctx = undefined
+  }
+
+  const setupAnimations = () => {
+    const section = luciaSection.value
+    if (!section) return
+
+    const secondVideoSection = document.querySelector('.lucia')
+
+    killAnimations()
+
+    ctx = gsap.context(() => {
+      if (prefersReducedMotion.value) {
+        gsap.set(section, { marginTop: 0 })
+        if (secondVideoSection) gsap.set(secondVideoSection, { opacity: 1 })
+        return
+      }
+
+      gsap.set(section, { marginTop: '-80vh' })
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 40%',
+          end: '10% center',
+          scrub: 2,
+        },
+      })
+
+      gsap.to('.img-box', {
+        y: -300,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top center',
+          end: '80% center',
+          scrub: 2,
+          refreshPriority: 1,
+        },
+      })
+
+      if (!secondVideoSection) return
+
+      tl.to(secondVideoSection, {
+        opacity: 0,
+        duration: 1,
+      })
+    }, section)
+  }
+
+  onMounted(() => {
+    setupAnimations()
+  })
+
+  watch([prefersReducedMotion, isMobile], () => {
+    setupAnimations()
+  })
+
+  onUnmounted(() => {
+    killAnimations()
+  })
+</script>
 
 <template>
-  <section class="lucia-life" aria-labelledby="lucia-name">
+  <section ref="luciaSection" class="lucia-life" aria-labelledby="lucia-name">
     <div class="img-box mt-96 flex flex-col items-end gap-5 ps-10 lg:w-1/2">
       <figure class="lucia-1">
         <img src="/images/lucia/lucia-1.webp" alt="Lucia Caminos" />

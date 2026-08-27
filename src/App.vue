@@ -3,6 +3,9 @@ import NavBar from '@/sections/NavBar.vue'
 import HeroSection from '@/sections/HeroSection.vue'
 import FirstVideo from './sections/FirstVideo.vue'
 import JasonSection from './sections/JasonSection.vue'
+import SecondVideo from './sections/SecondVideo.vue'
+import LuciaSection from './sections/LuciaSection.vue'
+import PostCard from './sections/PostCard.vue'
 </script>
 
 <template>
@@ -12,11 +15,11 @@ import JasonSection from './sections/JasonSection.vue'
     <HeroSection />
     <FirstVideo />
     <JasonSection />
-
-    <!--
     <SecondVideo />
     <LuciaSection />
     <PostCard />
+    <!--
+    
     <FinalSection />
     <OutroSection />
     -->

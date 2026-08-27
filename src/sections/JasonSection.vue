@@ -8,7 +8,7 @@ const { prefersReducedMotion } = usePrefersReducedMotion()
 const { width } = useViewportWidth()
 let ctx: gsap.Context | undefined
 
-const JasonSection = ref<HTMLElement | null>(null)
+const jasonSection = ref<HTMLElement | null>(null)
 
 const isMobile = computed(() => width.value <= 768)
 
@@ -18,7 +18,7 @@ const killAnimations = () => {
 }
 
 const setupAnimations = () => {
-  const section = JasonSection.value
+  const section = jasonSection.value
   if (!section) return
 
   const firstVideoSection = document.querySelector('.first-vd-wrapper')
@@ -78,7 +78,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="JasonSection" class="jason" aria-labelledby="jason-name">
+  <section ref="jasonSection" class="jason" aria-labelledby="jason-name">
     <div class="jason-content max-w-lg">
       <h2 id="jason-name" class="character-name">Jason Duval</h2>
       <p class="character-tagline">
