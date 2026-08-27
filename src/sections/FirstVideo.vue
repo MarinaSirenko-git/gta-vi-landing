@@ -46,6 +46,7 @@ const setupAnimations = () => {
         end: '+=200% top',
         scrub: true,
         pin: true,
+        refreshPriority: 2,
       },
     })
 

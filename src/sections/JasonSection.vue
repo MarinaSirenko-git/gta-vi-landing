@@ -1,9 +1,84 @@
 <script setup lang="ts">
+import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
+import { useViewportWidth } from '@/composables/useViewportWidth'
+import gsap from 'gsap'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
+const { prefersReducedMotion } = usePrefersReducedMotion()
+const { width } = useViewportWidth()
+let ctx: gsap.Context | undefined
+
+const JasonSection = ref<HTMLElement | null>(null)
+
+const isMobile = computed(() => width.value <= 768)
+
+const killAnimations = () => {
+  ctx?.revert()
+  ctx = undefined
+}
+
+const setupAnimations = () => {
+  const section = JasonSection.value
+  if (!section) return
+
+  const firstVideoSection = document.querySelector('.first-vd-wrapper')
+
+  killAnimations()
+
+  ctx = gsap.context(() => {
+    if (prefersReducedMotion.value) {
+      gsap.set(section, { marginTop: 0 })
+      if (firstVideoSection) gsap.set(firstVideoSection, { opacity: 1 })
+      return
+    }
+
+    gsap.set(section, { marginTop: '-80vh' })
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 40%',
+        end: '10% center',
+        scrub: 2,
+      },
+    })
+
+    gsap.to('.img-box', {
+      y: -300,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top center',
+        end: '80% center',
+        scrub: 2,
+        refreshPriority: 1,
+      },
+    })
+
+    if (!firstVideoSection) return
+
+    tl.to(firstVideoSection, {
+      opacity: 0,
+      duration: 1,
+    })
+  }, section)
+}
+
+onMounted(() => {
+  setupAnimations()
+})
+
+watch([prefersReducedMotion, isMobile], () => {
+  setupAnimations()
+})
+
+onUnmounted(() => {
+  killAnimations()
+})
 </script>
 
 <template>
-  <section class="jason" aria-labelledby="jason-name">
+  <section ref="JasonSection" class="jason" aria-labelledby="jason-name">
     <div class="jason-content max-w-lg">
       <h2 id="jason-name" class="character-name">Jason Duval</h2>
       <p class="character-tagline">
