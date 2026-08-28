@@ -1,11 +1,78 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
+import gsap from 'gsap'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+
+const { prefersReducedMotion } = usePrefersReducedMotion()
+let ctx: gsap.Context | undefined
+
+const messageSection = ref<HTMLElement | null>(null)
+
+const killAnimations = () => {
+  ctx?.revert()
+  ctx = undefined
+}
+
+const setupAnimations = () => {
+  const section = messageSection.value
+  const finalContent = document.querySelector('.final-content')
+
+  if (!section) return
+
+  killAnimations()
+
+  ctx = gsap.context(() => {
+    if (prefersReducedMotion.value) {
+      gsap.set(section, { marginTop: 0, opacity: 1 })
+      if (finalContent) gsap.set(finalContent, { opacity: 1 })
+      return
+    }
+
+    // Pulled over the pinned final section so the message scrolls across the
+    // still-fixed video instead of pushing it off screen.
+    gsap.set(section, { marginTop: '-100vh', opacity: 0 })
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'top top',
+        scrub: true,
+        refreshPriority: -2,
+      },
+    })
+
+    tl.to(section, { opacity: 1, ease: 'none', duration: 1 }, 0)
+
+    if (finalContent) {
+      tl.to(finalContent, { opacity: 0, ease: 'none', duration: 1 }, 0)
+    }
+  }, section)
+}
+
+onMounted(() => {
+  setupAnimations()
+})
+
+watch(prefersReducedMotion, () => {
+  setupAnimations()
+})
+
+onUnmounted(() => {
+  killAnimations()
+})
+</script>
 
 <template>
-  <section class="final-message" aria-labelledby="outro-heading">
+  <section ref="messageSection" class="final-message" aria-labelledby="outro-heading">
     <div class="col-center h-full gap-10">
       <img
         src="/images/outro/logo-480.webp"
-        srcset="/images/outro/logo-320.webp 320w, /images/outro/logo-480.webp 480w"
+        srcset="
+          /images/outro/logo-240.webp 240w,
+          /images/outro/logo-320.webp 320w,
+          /images/outro/logo-480.webp 480w
+        "
         sizes="(min-width: 768px) 288px, 208px"
         alt="Grand Theft Auto VI"
         width="480"

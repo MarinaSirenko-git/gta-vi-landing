@@ -1,12 +1,13 @@
 <script setup lang="ts">
-  import NavBar from '@/sections/NavBar.vue'
-  import HeroSection from '@/sections/HeroSection.vue'
-  import FirstVideo from './sections/FirstVideo.vue'
-  import JasonSection from './sections/JasonSection.vue'
-  import SecondVideo from './sections/SecondVideo.vue'
-  import LuciaSection from './sections/LuciaSection.vue'
-  import PostCard from './sections/PostCard.vue'
-  import FinalSection from './sections/FinalSection.vue'
+import NavBar from '@/sections/NavBar.vue'
+import HeroSection from '@/sections/HeroSection.vue'
+import FirstVideo from './sections/FirstVideo.vue'
+import JasonSection from './sections/JasonSection.vue'
+import SecondVideo from './sections/SecondVideo.vue'
+import LuciaSection from './sections/LuciaSection.vue'
+import PostCard from './sections/PostCard.vue'
+import FinalSection from './sections/FinalSection.vue'
+import OutroSection from './sections/OutroSection.vue'
 </script>
 
 <template>
@@ -20,9 +21,6 @@
     <LuciaSection />
     <PostCard />
     <FinalSection />
-
-    <!--
     <OutroSection />
-    -->
   </main>
 </template>

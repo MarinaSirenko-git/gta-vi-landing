@@ -240,7 +240,7 @@ main {
   }
 
   .final-message {
-    @apply absolute z-50 h-dvh w-full overflow-hidden opacity-100;
+    @apply relative z-50 h-dvh w-full overflow-hidden opacity-100;
   }
 }
 

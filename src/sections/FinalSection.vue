@@ -46,7 +46,7 @@ const setupAnimations = () => {
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: '90% top',
+        end: '+=200%',
         scrub: true,
         pin: true,
         refreshPriority: -1,
@@ -63,6 +63,10 @@ const setupAnimations = () => {
         0,
       )
     }
+
+    // Empty tail holds the pin open past the last frame, reserving the second
+    // half of the range for the outro to scroll over the still-pinned video.
+    tl.to({}, { duration: 3 }, 3)
   }, section)
 }
 
