@@ -23,4 +23,7 @@ import OutroSection from './sections/OutroSection.vue'
     <FinalSection />
     <OutroSection />
   </main>
+  <footer class="site-footer black-gradient-bg">
+    <p>Unofficial fan recreation, not affiliated with Rockstar Games / Take-Two</p>
+  </footer>
 </template>

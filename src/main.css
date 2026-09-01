@@ -237,6 +237,10 @@ main {
   .final-message {
     @apply relative z-50 h-dvh w-full overflow-hidden opacity-100;
   }
+
+  .site-footer {
+    @apply px-5 py-5 text-center text-sm text-white/90 md:px-16 md:text-base;
+  }
 }
 
 .black-gradient-bg {
