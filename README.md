@@ -78,6 +78,37 @@ npm run lint
 npm run type-check
 ```
 
+## Deployment
+
+This project is configured for Cloudflare Workers Static Assets deployment.
+
+### Local Cloudflare preview
+
+```bash
+npm run dev:cf
+```
+
+### Deploy
+
+```bash
+npx wrangler login
+npm run deploy
+```
+
+After deployment, Cloudflare will provide a `*.workers.dev` URL.
+
+### Routing
+
+SPA fallback is not enabled because no client-side router package was detected.
+
+### Performance audit
+
+After local preview or deployment, run:
+
+```txt
+user-run-web-perf-audit DEPLOYED_URL
+```
+
 ### Credits
 
 - **Design:** mockup provided by the [JavaScript Mastery](https://jsmastery.com) community.
@@ -158,6 +189,37 @@ npm run build        # type-check + production-сборка
 npm run preview
 npm run lint
 npm run type-check
+```
+
+## Deployment
+
+Проект настроен на деплой через Cloudflare Workers Static Assets.
+
+### Локальный превью Cloudflare
+
+```bash
+npm run dev:cf
+```
+
+### Деплой
+
+```bash
+npx wrangler login
+npm run deploy
+```
+
+После деплоя Cloudflare выдаст URL вида `*.workers.dev`.
+
+### Routing
+
+SPA fallback не включён: пакет клиентского роутера не обнаружен.
+
+### Performance audit
+
+После локального превью или деплоя:
+
+```txt
+user-run-web-perf-audit DEPLOYED_URL
 ```
 
 ### Credits
