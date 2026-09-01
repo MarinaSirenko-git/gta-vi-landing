@@ -14,7 +14,10 @@
     "lint": "run-s \"lint:*\"",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
-    "format": "prettier --write --experimental-cli src/"
+    "format": "prettier --write --experimental-cli src/",
+    "videos:audit": "node scripts/audit-videos.mjs",
+    "videos:optimize": "bash scripts/optimize-videos.sh",
+    "videos:optimize:replace": "bash scripts/optimize-videos.sh --replace"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

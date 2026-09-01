@@ -90,7 +90,7 @@ onUnmounted(() => {
         ref="videoEl"
         muted
         playsinline
-        preload="auto"
+        preload="metadata"
         src="/videos/postcard-vd.mp4"
         title="Leonida Keys postcard"
       />

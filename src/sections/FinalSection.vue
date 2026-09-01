@@ -103,7 +103,7 @@ onUnmounted(() => {
         class="final-vd size-full object-cover"
         muted
         playsinline
-        preload="auto"
+        preload="metadata"
         src="/videos/output3.mp4"
         title="Grand Theft Auto VI final trailer"
       />

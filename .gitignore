@@ -37,3 +37,7 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Generated video outputs (run npm run videos:optimize)
+public/videos/optimized/
+public/videos/.backup/

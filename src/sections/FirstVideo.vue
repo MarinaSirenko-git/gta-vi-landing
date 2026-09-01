@@ -100,7 +100,7 @@ onUnmounted(() => {
         class="first-vd"
         muted
         playsinline
-        preload="auto"
+        preload="metadata"
         src="/videos/output1.mp4"
         title="Grand Theft Auto VI story trailer"
       />
