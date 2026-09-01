@@ -80,7 +80,17 @@ npm run type-check
 
 ## Deployment
 
-This project is configured for Cloudflare Workers Static Assets deployment.
+This project is deployed to Cloudflare Workers Static Assets.
+
+### Production URL
+
+[View deployed site](https://gta-vi-landing.marina-sirenko1-80f.workers.dev)
+
+### Deploy command
+
+```bash
+npm run deploy
+```
 
 ### Local Cloudflare preview
 
@@ -88,26 +98,17 @@ This project is configured for Cloudflare Workers Static Assets deployment.
 npm run dev:cf
 ```
 
-### Deploy
+### Performance audit
 
-```bash
-npx wrangler login
-npm run deploy
+After deployment, run:
+
+```txt
+user-run-web-perf-audit https://gta-vi-landing.marina-sirenko1-80f.workers.dev
 ```
-
-After deployment, Cloudflare will provide a `*.workers.dev` URL.
 
 ### Routing
 
-SPA fallback is not enabled because no client-side router package was detected.
-
-### Performance audit
-
-After local preview or deployment, run:
-
-```txt
-user-run-web-perf-audit DEPLOYED_URL
-```
+SPA fallback is not enabled. This is expected for simple static landing pages or projects without a client-side router.
 
 ### Credits
 
@@ -193,7 +194,17 @@ npm run type-check
 
 ## Deployment
 
-Проект настроен на деплой через Cloudflare Workers Static Assets.
+Проект задеплоен на Cloudflare Workers Static Assets.
+
+### Production URL
+
+[Открыть сайт](https://gta-vi-landing.marina-sirenko1-80f.workers.dev)
+
+### Deploy command
+
+```bash
+npm run deploy
+```
 
 ### Локальный превью Cloudflare
 
@@ -201,26 +212,17 @@ npm run type-check
 npm run dev:cf
 ```
 
-### Деплой
+### Performance audit
 
-```bash
-npx wrangler login
-npm run deploy
+После деплоя:
+
+```txt
+user-run-web-perf-audit https://gta-vi-landing.marina-sirenko1-80f.workers.dev
 ```
-
-После деплоя Cloudflare выдаст URL вида `*.workers.dev`.
 
 ### Routing
 
-SPA fallback не включён: пакет клиентского роутера не обнаружен.
-
-### Performance audit
-
-После локального превью или деплоя:
-
-```txt
-user-run-web-perf-audit DEPLOYED_URL
-```
+SPA fallback не включён. Это ожидаемо для простого статического лендинга без клиентского роутера.
 
 ### Credits
 
