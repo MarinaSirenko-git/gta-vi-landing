@@ -79,7 +79,7 @@ onUnmounted(() => {
 
 <template>
   <section ref="jasonSection" class="jason" aria-labelledby="jason-name">
-    <div class="jason-content max-w-lg">
+    <div class="jason-content max-w-lg lg:w-1/2">
       <h2 id="jason-name" class="character-name">Jason Duval</h2>
       <p class="character-tagline">
         Jason wants an easy life, but things just keep getting harder.
@@ -95,7 +95,7 @@ onUnmounted(() => {
       </figure>
     </div>
 
-    <div class="img-box mt-96 space-y-5">
+    <div class="img-box mt-96 min-w-0 space-y-5 lg:w-1/2">
       <figure class="jason-1">
         <img src="/images/jason/jason-1.webp" alt="Jason Duval leaning against a car" />
       </figure>
