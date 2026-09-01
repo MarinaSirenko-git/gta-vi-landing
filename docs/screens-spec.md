@@ -36,14 +36,14 @@ Component: `src/sections/NavBar.vue`
 
 ### EN
 
-1. Fixed header over the whole page: GTA VI mark on the left, menu control on the right.
-2. Logo is a home link to `#top`. Menu is a real `button` with an accessible name. No panel is required in this iteration.
+1. Fixed header over the whole page: GTA VI mark on the left. There is no menu control.
+2. Logo is a home link to `#top`.
 3. No scroll animation.
 
 ### RU
 
-1. Фиксированная шапка на всю ширину: знак GTA VI слева, меню справа.
-2. Логотип — ссылка домой на `#top`. Меню — настоящая `button` с доступным именем. Выпадающая панель в этой итерации не нужна.
+1. Фиксированная шапка на всю ширину: знак GTA VI слева. Кнопки меню нет.
+2. Логотип — ссылка домой на `#top`.
 3. Скролл-анимации нет.
 
 ---
@@ -199,14 +199,14 @@ Assets: `public/images/postcard/overlay.webp`, `public/videos/postcard-vd.mp4`
 1. Centered postcard: gradient backdrop, video, frame overlay, CTA **Explore Leonida Keys**.
 2. Hover: slight rotate/scale; button tint to brand yellow.
 3. No pin. Scrub `currentTime` from `0` to duration while the section travels from `top center` to `bottom center`.
-4. CTA is a `button` (no navigation in this iteration).
+4. CTA is a link to the official Leonida Keys page on rockstargames.com (opens in a new tab).
 
 ### RU
 
 1. Открытка по центру: градиентный фон, видео, рамка-оверлей, CTA **Explore Leonida Keys**.
 2. Hover: лёгкий поворот/скейл; кнопка в брендовый жёлтый.
 3. Pin нет. Пока секция едет от `top center` до `bottom center`, вести `currentTime` от `0` до конца.
-4. CTA — `button` (перехода в этой итерации нет).
+4. CTA — ссылка на официальный раздел Leonida Keys на rockstargames.com (новая вкладка).
 
 The postcard backdrop gradient is decorative. It is not the Hero radial mask.
 

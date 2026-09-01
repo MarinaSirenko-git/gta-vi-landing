@@ -4,6 +4,8 @@ import { useViewportWidth } from '@/composables/useViewportWidth'
 import gsap from 'gsap'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
+const LEONIDA_KEYS_URL = 'https://www.rockstargames.com/VI/leonida-keys'
+
 const { prefersReducedMotion } = usePrefersReducedMotion()
 const { width } = useViewportWidth()
 let ctx: gsap.Context | undefined
@@ -94,9 +96,15 @@ onUnmounted(() => {
       />
 
       <h2 id="postcard-heading" class="sr-only">Leonida Keys</h2>
-      <button type="button" class="transition duration-700 group-hover:bg-yellow">
+      <a
+        :href="LEONIDA_KEYS_URL"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="transition duration-700 group-hover:bg-yellow cursor-pointer z-10"
+        aria-label="Explore Leonida Keys on the official site (opens in a new tab)"
+      >
         Explore Leonida Keys
-      </button>
+      </a>
     </div>
   </section>
 </template>

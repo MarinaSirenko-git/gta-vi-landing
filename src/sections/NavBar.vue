@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <header>
     <nav aria-label="Primary">

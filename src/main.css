@@ -73,16 +73,11 @@ main {
   }
 
   nav {
-    @apply fixed top-0 left-0 z-[100] flex w-full items-center justify-between p-5 md:p-16;
+    @apply fixed top-0 left-0 z-[100] flex w-full items-center p-5 md:p-16;
   }
 
-  nav a,
-  nav button {
+  nav a {
     @apply border-0 bg-transparent p-0;
-  }
-
-  nav button {
-    @apply cursor-pointer;
   }
 
   .gradient-title {
@@ -225,8 +220,8 @@ main {
         @apply absolute z-10 h-full w-full;
       }
 
-      button {
-        @apply absolute -bottom-28 left-1/2 w-2/3 -translate-x-1/2 cursor-pointer rounded-full bg-white px-5 py-4 text-lg md:bottom-16 md:w-fit md:px-7;
+      a {
+        @apply absolute -bottom-28 left-1/2 w-2/3 -translate-x-1/2 cursor-pointer rounded-full bg-white px-5 py-4 text-center text-lg no-underline md:bottom-16 md:w-fit md:px-7;
       }
     }
   }

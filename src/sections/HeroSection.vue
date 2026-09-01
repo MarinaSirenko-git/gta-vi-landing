@@ -5,6 +5,8 @@ import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import ComingSoon from './ComingSoon.vue'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 
+const TRAILER_URL = 'https://www.youtube.com/watch?v=VQRLujxTm3c'
+
 const { initialMaskPos, initialMaskSize, maskSize } = useHeroMaskSettings()
 const { prefersReducedMotion } = usePrefersReducedMotion()
 const heroSection = ref<HTMLElement | null>(null)
@@ -13,6 +15,7 @@ let layoutCtx: gsap.Context | undefined
 let animationCtx: gsap.Context | undefined
 let playBounce: gsap.core.Timeline | undefined
 
+// The trailer link itself stays available with reduced motion — only the pulse is skipped.
 const bouncePlayIcon = () => {
   if (prefersReducedMotion.value) return
   playBounce?.restart()
@@ -36,16 +39,6 @@ const applyInitialLayout = () => {
     })
 
     gsap.set('.entrance-message', { marginTop: '0vh' })
-
-    const playButton = hero.querySelector('.play-img')
-    if (playButton instanceof HTMLButtonElement) {
-      const hidePlay = prefersReducedMotion.value
-      gsap.set(playButton, {
-        autoAlpha: hidePlay ? 0 : 1,
-        pointerEvents: hidePlay ? 'none' : 'auto',
-      })
-      playButton.inert = hidePlay
-    }
   }, hero)
 }
 
@@ -111,17 +104,13 @@ const setupAnimations = () => {
         '<',
       )
 
-    playBounce = gsap
-      .timeline({ paused: true })
-      .to(playIcon.value, { rotation: 90, duration: 0.5, ease: 'power2.out' })
-      .to(playIcon.value, {
-        y: 38,
-        duration: 1,
-        ease: 'power2.out',
-        repeat: 3,
-        yoyo: true,
-      })
-      .to(playIcon.value, { rotation: 0, duration: 0.5, ease: 'power2.out' })
+    playBounce = gsap.timeline({ paused: true }).to(playIcon.value, {
+      scale: 1.35,
+      duration: 0.5,
+      ease: 'power2.out',
+      repeat: 3,
+      yoyo: true,
+    })
   }, heroSection.value)
 }
 
@@ -185,10 +174,12 @@ onUnmounted(() => {
           height="250"
         />
       </p>
-      <button
-        type="button"
+      <a
+        :href="TRAILER_URL"
+        target="_blank"
+        rel="noopener noreferrer"
         class="play-img fade-out"
-        aria-label="Play trailer"
+        aria-label="Play trailer on YouTube (opens in a new tab)"
         @mouseenter="bouncePlayIcon"
         @focus="bouncePlayIcon"
       >
@@ -200,7 +191,7 @@ onUnmounted(() => {
           height="28"
           class="ml-1 w-7"
         />
-      </button>
+      </a>
     </div>
 
     <div>
