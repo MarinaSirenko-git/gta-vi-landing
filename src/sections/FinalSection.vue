@@ -104,6 +104,7 @@ onUnmounted(() => {
         muted
         playsinline
         preload="metadata"
+        poster="/images/videos/final-video-poster.webp"
         src="/videos/output3.mp4"
         title="Grand Theft Auto VI final trailer"
       />

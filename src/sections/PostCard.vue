@@ -91,6 +91,7 @@ onUnmounted(() => {
         muted
         playsinline
         preload="metadata"
+        poster="/images/videos/postcard-poster.webp"
         src="/videos/postcard-vd.mp4"
         title="Leonida Keys postcard"
       />

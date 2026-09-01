@@ -98,6 +98,7 @@ onUnmounted(() => {
         muted
         playsinline
         preload="metadata"
+        poster="/images/videos/second-video-poster.webp"
         src="/videos/output2.mp4"
         title="Lucia Caminos story trailer"
         style="object-position: 15% 0%"
