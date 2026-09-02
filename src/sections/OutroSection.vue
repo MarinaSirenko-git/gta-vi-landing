@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
+import { useScrollSceneTarget } from '@/composables/useScrollSceneRegistry'
 import gsap from 'gsap'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 
@@ -7,6 +8,7 @@ const { prefersReducedMotion } = usePrefersReducedMotion()
 let ctx: gsap.Context | undefined
 
 const messageSection = ref<HTMLElement | null>(null)
+const finalContentTarget = useScrollSceneTarget('finalContent')
 
 const killAnimations = () => {
   ctx?.revert()
@@ -15,7 +17,7 @@ const killAnimations = () => {
 
 const setupAnimations = () => {
   const section = messageSection.value
-  const finalContent = document.querySelector('.final-content')
+  const finalContent = finalContentTarget.value
 
   if (!section) return
 
@@ -54,7 +56,7 @@ onMounted(() => {
   setupAnimations()
 })
 
-watch(prefersReducedMotion, () => {
+watch([prefersReducedMotion, finalContentTarget], () => {
   setupAnimations()
 })
 

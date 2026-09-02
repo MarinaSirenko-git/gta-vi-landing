@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideScrollSceneRegistry } from '@/composables/useScrollSceneRegistry'
 import NavBar from '@/sections/NavBar.vue'
 import HeroSection from '@/sections/HeroSection.vue'
 import FirstVideo from './sections/FirstVideo.vue'
@@ -8,6 +9,8 @@ import LuciaSection from './sections/LuciaSection.vue'
 import PostCard from './sections/PostCard.vue'
 import FinalSection from './sections/FinalSection.vue'
 import OutroSection from './sections/OutroSection.vue'
+
+provideScrollSceneRegistry()
 </script>
 
 <template>

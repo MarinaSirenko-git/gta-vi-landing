@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
+import { useRegisterScrollTarget } from '@/composables/useScrollSceneRegistry'
 import gsap from 'gsap'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 
@@ -7,7 +8,9 @@ const { prefersReducedMotion } = usePrefersReducedMotion()
 let ctx: gsap.Context | undefined
 
 const finalSection = ref<HTMLElement | null>(null)
+const finalContent = ref<HTMLElement | null>(null)
 const videoEl = ref<HTMLVideoElement | null>(null)
+useRegisterScrollTarget('finalContent', finalContent)
 
 const killAnimations = () => {
   ctx?.revert()
@@ -64,8 +67,6 @@ const setupAnimations = () => {
       )
     }
 
-    // Empty tail holds the pin open past the last frame, reserving the second
-    // half of the range for the outro to scroll over the still-pinned video.
     tl.to({}, { duration: 3 }, 3)
   }, section)
 }
@@ -97,7 +98,7 @@ onUnmounted(() => {
 
 <template>
   <section ref="finalSection" class="final" aria-label="Final trailer">
-    <div class="final-content size-full">
+    <div ref="finalContent" class="final-content size-full">
       <video
         ref="videoEl"
         class="final-vd size-full object-cover"

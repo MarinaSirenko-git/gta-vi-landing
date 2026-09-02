@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
   import { useViewportWidth } from '@/composables/useViewportWidth'
+  import { useScrollSceneTarget } from '@/composables/useScrollSceneRegistry'
   import gsap from 'gsap'
   import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
@@ -9,6 +10,7 @@
   let ctx: gsap.Context | undefined
 
   const luciaSection = ref<HTMLElement | null>(null)
+  const secondVideoTarget = useScrollSceneTarget('secondVideo')
 
   const isMobile = computed(() => width.value <= 768)
 
@@ -21,7 +23,7 @@
     const section = luciaSection.value
     if (!section) return
 
-    const secondVideoSection = document.querySelector('.lucia')
+    const secondVideoSection = secondVideoTarget.value
 
     killAnimations()
 
@@ -68,7 +70,7 @@
     setupAnimations()
   })
 
-  watch([prefersReducedMotion, isMobile], () => {
+  watch([prefersReducedMotion, isMobile, secondVideoTarget], () => {
     setupAnimations()
   })
 

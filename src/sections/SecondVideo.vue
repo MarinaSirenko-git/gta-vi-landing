@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useViewportWidth } from '@/composables/useViewportWidth'
+import { useRegisterScrollTarget } from '@/composables/useScrollSceneRegistry'
 import gsap from 'gsap'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
@@ -10,6 +11,7 @@ let ctx: gsap.Context | undefined
 
 const lusiaSection = ref<HTMLElement | null>(null)
 const videoEl = ref<HTMLVideoElement | null>(null)
+useRegisterScrollTarget('secondVideo', lusiaSection)
 
 const isMobile = computed(() => width.value <= 768)
 const overlap = computed(() => (isMobile.value ? '-80vh' : '-150vh'))

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useViewportWidth } from '@/composables/useViewportWidth'
+import { useScrollSceneTarget } from '@/composables/useScrollSceneRegistry'
 import gsap from 'gsap'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
@@ -9,6 +10,7 @@ const { width } = useViewportWidth()
 let ctx: gsap.Context | undefined
 
 const jasonSection = ref<HTMLElement | null>(null)
+const firstVideoTarget = useScrollSceneTarget('firstVideo')
 
 const isMobile = computed(() => width.value <= 768)
 
@@ -21,7 +23,7 @@ const setupAnimations = () => {
   const section = jasonSection.value
   if (!section) return
 
-  const firstVideoSection = document.querySelector('.first-vd-wrapper')
+  const firstVideoSection = firstVideoTarget.value
 
   killAnimations()
 
@@ -68,7 +70,7 @@ onMounted(() => {
   setupAnimations()
 })
 
-watch([prefersReducedMotion, isMobile], () => {
+watch([prefersReducedMotion, isMobile, firstVideoTarget], () => {
   setupAnimations()
 })
 

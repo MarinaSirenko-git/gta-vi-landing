@@ -2,6 +2,7 @@
 import gsap from 'gsap'
 import { useHeroMaskSettings } from '@/composables/useHeroMaskSettings'
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
+import { useRegisterScrollTarget } from '@/composables/useScrollSceneRegistry'
 import ComingSoon from './ComingSoon.vue'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 
@@ -11,6 +12,7 @@ const { initialMaskPos, initialMaskSize, maskSize } = useHeroMaskSettings()
 const { prefersReducedMotion } = usePrefersReducedMotion()
 const heroSection = ref<HTMLElement | null>(null)
 const playIcon = ref<HTMLImageElement | null>(null)
+useRegisterScrollTarget('hero', heroSection)
 let layoutCtx: gsap.Context | undefined
 let animationCtx: gsap.Context | undefined
 let playBounce: gsap.core.Timeline | undefined
