@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useViewportWidth } from '@/composables/useViewportWidth'
+import { useLazyVideoSource } from '@/composables/useLazyVideoSource'
 import gsap from 'gsap'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+import { computed, onUnmounted, ref, watch } from 'vue'
 
 const LEONIDA_KEYS_URL = 'https://www.rockstargames.com/VI/leonida-keys'
 
@@ -52,21 +54,17 @@ const setupAnimations = () => {
       )
     }
   }, section)
+
+  ScrollTrigger.refresh()
 }
 
 const onVideoReady = () => {
   setupAnimations()
 }
 
-onMounted(() => {
-  const video = videoEl.value
-  if (!video) return
-
-  if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
-    setupAnimations()
-  } else {
-    video.addEventListener('loadedmetadata', onVideoReady)
-  }
+const { videoSrc } = useLazyVideoSource(postCardSection, videoEl, '/videos/postcard-vd.mp4', onVideoReady, {
+  rootMargin: '150% 0px',
+  loadImmediately: () => prefersReducedMotion.value,
 })
 
 watch([prefersReducedMotion, isMobile], () => {
@@ -74,7 +72,6 @@ watch([prefersReducedMotion, isMobile], () => {
 })
 
 onUnmounted(() => {
-  videoEl.value?.removeEventListener('loadedmetadata', onVideoReady)
   killAnimations()
 })
 </script>
@@ -91,9 +88,9 @@ onUnmounted(() => {
         ref="videoEl"
         muted
         playsinline
-        preload="metadata"
+        preload="none"
+        :src="videoSrc"
         poster="/images/videos/postcard-poster.webp"
-        src="/videos/postcard-vd.mp4"
         title="Leonida Keys postcard"
         aria-describedby="postcard-video-desc"
       />

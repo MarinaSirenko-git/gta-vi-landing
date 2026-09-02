@@ -2,8 +2,10 @@
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useViewportWidth } from '@/composables/useViewportWidth'
 import { useRegisterScrollTarget } from '@/composables/useScrollSceneRegistry'
+import { useLazyVideoSource } from '@/composables/useLazyVideoSource'
 import gsap from 'gsap'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+import { computed, onUnmounted, ref, watch } from 'vue'
 
 const { prefersReducedMotion } = usePrefersReducedMotion()
 const { width } = useViewportWidth()
@@ -64,21 +66,17 @@ const setupAnimations = () => {
       )
     } 
   }, section)
+
+  ScrollTrigger.refresh()
 }
 
 const onVideoReady = () => {
   setupAnimations()
 }
 
-onMounted(() => {
-  const video = videoEl.value
-  if (!video) return
-
-  if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
-    setupAnimations()
-  } else {
-    video.addEventListener('loadedmetadata', onVideoReady)
-  }
+const { videoSrc } = useLazyVideoSource(luciaSection, videoEl, '/videos/output2.mp4', onVideoReady, {
+  rootMargin: '150% 0px',
+  loadImmediately: () => prefersReducedMotion.value,
 })
 
 watch([prefersReducedMotion, isMobile], () => {
@@ -86,7 +84,6 @@ watch([prefersReducedMotion, isMobile], () => {
 })
 
 onUnmounted(() => {
-  videoEl.value?.removeEventListener('loadedmetadata', onVideoReady)
   killAnimations()
 })
 </script>
@@ -100,9 +97,9 @@ onUnmounted(() => {
         class="second-vd size-full object-cover"
         muted
         playsinline
-        preload="metadata"
+        preload="none"
+        :src="videoSrc"
         poster="/images/videos/second-video-poster.webp"
-        src="/videos/output2.mp4"
         title="Lucia Caminos story trailer"
         aria-describedby="second-video-desc"
         style="object-position: 15% 0%"

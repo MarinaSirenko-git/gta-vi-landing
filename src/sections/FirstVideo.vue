@@ -5,8 +5,10 @@ import {
   useRegisterScrollTarget,
   useScrollSceneTarget,
 } from '@/composables/useScrollSceneRegistry'
+import { useLazyVideoSource } from '@/composables/useLazyVideoSource'
 import gsap from 'gsap'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+import { computed, onUnmounted, ref, watch } from 'vue'
 
 const { prefersReducedMotion } = usePrefersReducedMotion()
 const { width } = useViewportWidth()
@@ -71,21 +73,17 @@ const setupAnimations = () => {
       )
     }
   }, section)
+
+  ScrollTrigger.refresh()
 }
 
 const onVideoReady = () => {
   setupAnimations()
 }
 
-onMounted(() => {
-  const video = videoEl.value
-  if (!video) return
-
-  if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
-    setupAnimations()
-  } else {
-    video.addEventListener('loadedmetadata', onVideoReady)
-  }
+const { videoSrc } = useLazyVideoSource(firstVideoSection, videoEl, '/videos/output1.mp4', onVideoReady, {
+  rootMargin: '150% 0px',
+  loadImmediately: () => prefersReducedMotion.value,
 })
 
 watch([prefersReducedMotion, isMobile, heroTarget], () => {
@@ -93,7 +91,6 @@ watch([prefersReducedMotion, isMobile, heroTarget], () => {
 })
 
 onUnmounted(() => {
-  videoEl.value?.removeEventListener('loadedmetadata', onVideoReady)
   killAnimations()
 })
 </script>
@@ -107,9 +104,9 @@ onUnmounted(() => {
         class="first-vd"
         muted
         playsinline
-        preload="metadata"
+        preload="none"
+        :src="videoSrc"
         poster="/images/videos/first-video-poster.webp"
-        src="/videos/output1.mp4"
         title="Grand Theft Auto VI story trailer"
         aria-describedby="first-video-desc"
       />
