@@ -84,7 +84,10 @@ main {
   }
 
   .gradient-title {
-    @apply font-round-bold bg-gradient-to-r from-pink-400 via-red-400 to-orange-400 bg-clip-text text-center text-[5rem] leading-[4.5rem] font-extrabold text-transparent uppercase md:text-[8rem] md:leading-[7rem];
+    --gradient-title-size: clamp(2rem, 9vw + 0.75rem, 8rem);
+    @apply font-round-bold bg-gradient-to-r from-pink-400 via-red-400 to-orange-400 bg-clip-text text-center font-extrabold text-transparent uppercase;
+    font-size: var(--gradient-title-size);
+    line-height: 0.88;
   }
 
   .hero-section {
