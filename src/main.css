@@ -213,14 +213,15 @@ main {
     }
 
     .post-card-wrapper {
-      @apply relative mx-5 flex h-[30vh] w-full items-center justify-center overflow-hidden md:mx-12 md:h-[40vh] xl:mx-56 xl:h-[85vh];
+      aspect-ratio: 2560 / 1707;
+      @apply relative mx-5 flex h-[30vh] w-[min(100%,calc(30vh*2560/1707))] items-center justify-center overflow-hidden md:mx-12 md:h-[40vh] md:w-[min(100%,calc(40vh*2560/1707))] xl:mx-56 xl:h-[85vh] xl:w-[min(100%,calc(85vh*2560/1707))];
 
       video {
         @apply h-full w-full object-cover 2xl:scale-x-105;
       }
 
       img {
-        @apply absolute z-10 h-full w-full;
+        @apply absolute inset-0 z-10 size-full object-cover;
       }
 
       a {

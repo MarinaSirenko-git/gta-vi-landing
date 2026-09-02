@@ -81,7 +81,12 @@ onUnmounted(() => {
     <div class="animated-gradient-bg" aria-hidden="true" />
 
     <div class="post-card-wrapper group transition duration-700 hover:rotate-1 hover:scale-[1.02]">
-      <img src="/images/postcard/overlay.webp" alt="" />
+      <img
+        src="/images/postcard/overlay.webp"
+        alt=""
+        width="2560"
+        height="1707"
+      />
 
       <p id="postcard-video-desc" class="sr-only">Leonida Keys postcard clip.</p>
       <video
