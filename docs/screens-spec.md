@@ -14,9 +14,11 @@ Bilingual product spec for the GTA VI Vue landing. Implement screens in this ord
 - Register `ScrollTrigger` once in `src/main.ts`.
 - Create tweens in `onMounted` inside `gsap.context(scope)`. Revert with `ctx.revert()` in `onUnmounted`.
 - Scope selectors to the section root. If the trigger is the section itself, pass the element (`ref`), not a class string — `querySelectorAll` does not match the scope root.
-- Videos: muted, `playsinline`, no native controls. Drive `currentTime` from scroll after `loadedmetadata` (also handle the case when metadata is already ready).
-- Do not ship unused course leftovers (for example `.mask-logo` if it is never animated).
-- Semantic HTML and accessible names stay as in the current markup.
+- Cross-section fades use `useScrollSceneRegistry` (`useRegisterScrollTarget` / `useScrollSceneTarget`) instead of `document.querySelector`.
+- Videos: muted, `playsinline`, no native controls, `preload="none"`. Sources are assigned lazily via `useLazyVideoSource` (IntersectionObserver + scroll fallback). Start scroll scrub after `loadeddata` (first decodable frame), not `loadedmetadata` alone.
+- Set `refreshPriority` on overlapping pins where needed. Call `ScrollTrigger.refresh()` after video-driven timelines rebuild.
+- Semantic HTML, accessible names, skip link, unofficial disclaimer in footer. Respect `prefers-reduced-motion`.
+- Static assets: long cache via `public/_headers`; preload display font in `index.html`.
 
 ### RU
 
@@ -24,9 +26,11 @@ Bilingual product spec for the GTA VI Vue landing. Implement screens in this ord
 - `ScrollTrigger` регистрировать один раз в `src/main.ts`.
 - Твины создавать в `onMounted` внутри `gsap.context(scope)`. На размонтировании — `ctx.revert()`.
 - Селекторы ограничивать корнем секции. Если триггер — сама секция, передавать элемент (`ref`), не строку класса: `querySelectorAll` не находит сам корень скоупа.
-- Видео: без звука, `playsinline`, без нативных контролов. `currentTime` вести от скролла после `loadedmetadata` (учесть случай, когда метаданные уже есть).
-- Не тащить мёртвые слои из курса (например `.mask-logo`, если его нигде не анимируют).
-- Семантическая вёрстка и доступные имена — как в текущей разметке.
+- Fade между секциями — через `useScrollSceneRegistry` (`useRegisterScrollTarget` / `useScrollSceneTarget`), без `document.querySelector`.
+- Видео: без звука, `playsinline`, без нативных контролов, `preload="none"`. Источник подключается лениво через `useLazyVideoSource` (IntersectionObserver + fallback по scroll). Scrub начинать после `loadeddata` (первый декодируемый кадр), а не только `loadedmetadata`.
+- На пересекающихся pin задавать `refreshPriority`. После пересборки video-timeline вызывать `ScrollTrigger.refresh()`.
+- Семантика, доступные имена, skip link, disclaimer в footer. Учитывать `prefers-reduced-motion`.
+- Статика: длинный cache через `public/_headers`; preload шрифта в `index.html`.
 
 ---
 
@@ -51,57 +55,51 @@ Component: `src/sections/NavBar.vue`
 ## 2. Hero (first screen)
 
 Components: `src/sections/HeroSection.vue`, `src/sections/ComingSoon.vue`  
-Assets: `public/images/hero/`, shared release art in `public/images/outro/`
+Assets: `public/images/hero/`, shared release art in `public/images/outro/`  
+Mask math: `src/composables/useHeroMaskSettings.ts`
 
 ### EN
 
 **Layers (bottom → top)**
 
-1. Cover stack inside `.mask-wrapper`: background photo, brand wordmark (raster), “Watch Trailer”, play button.
-2. CSS mask on that same wrapper: `mask-image` is the brand SVG (`big-hero-text.svg`). This is a hole, not a second text layer. Initial `mask-size` is huge (~3100–3500%) so the mask is invisible and the full cover shows.
-3. Flash logo: the same SVG as a normal image (`.overlay-logo`), starts at `opacity: 0`.
-4. Full-viewport release block (Coming Soon: logo, “Coming May 26th 2026”, PlayStation and Xbox). Hidden with a **CSS mask**, not `opacity` / `display`.
+1. Cover stack inside `.mask-wrapper`: background photo (portrait AVIF/WebP on `max-width: 767px`), brand wordmark (raster), “Watch Trailer”, play button (YouTube link).
+2. CSS mask on that same wrapper: `mask-image` is the brand SVG (`big-hero-text.svg`). Initial `mask-size` is huge (~3100–3500%) so the mask is invisible and the full cover shows.
+3. Flash logo: the same SVG as a normal image (`.overlay-logo` inside `.fake-logo-wrapper`), starts at `opacity: 0`. **Desktop only** (`width > 1024px`): hidden on mobile/tablet, flash step skipped in timeline.
+4. Full-viewport release block (Coming Soon: logo, **Coming November 19th 2026**, PlayStation and Xbox). Hidden with a **CSS mask**, not `opacity` / `display`. Title uses fluid `clamp()` sizing (`.gradient-title`).
 
-**Scroll:** pin the hero. Progress lasts about **two viewports** (`end: '+=200%'`, `scrub: 2.5`). The section stays on screen while the user scrolls.
+**Scroll:** pin the hero. Progress lasts about **two viewports** (`end: '+=200%'`, `scrub: 2.5`).
 
 **Sequence**
 
 1. On load, show the cover set (background, brand raster, trailer label, play).
 2. Fade out only the cover chrome (`.fade-out`): wordmark, trailer, play. **Keep the background.**
 3. Scale the background from the CSS start scale (`md:scale-125`) down to `1`.
-4. **At the same time** as (3), shrink the wrapper mask from the huge size to the compact size (~20–50% by breakpoint). The photo becomes visible only inside the GTA VI letter shapes.
+4. **At the same time** as (3), shrink the wrapper mask and animate **both** `maskSize` and `maskPosition` to compact values from `useHeroMaskSettings`:
+   - mobile (`≤768px`): `15rem auto`, `50% 9.5rem`
+   - tablet (`769–1024px`): `30% 30%`, `50% 17vh`
+   - desktop: `20% 20%`, `50% 22%`
 5. Then, **in parallel**:
    - fade the masked wrapper to `opacity: 0`;
-   - flash `.overlay-logo` to `opacity: 1`, then fade it out;
-   - reveal Coming Soon by animating `mask-image` from a zero-radius radial mask to  
+   - on **desktop only**: flash `.overlay-logo` to `opacity: 1`, then fade it out;
+   - reveal Coming Soon by animating `mask-image` to  
      `radial-gradient(circle at 50% 0vh, black 50%, transparent 100%)`.
 
-**About the “gradient”:** the pink–orange fill on “Coming May 26th” is only title styling. The **radial-gradient** on `.entrance-message` is the reveal: black = visible, transparent = hidden. It wipes the release screen in from the top. It is not a decorative backdrop.
+**Note:** `.mask-logo` in markup is a course leftover (initial `gsap.set` only); safe to remove in a cleanup pass.
 
 ### RU
 
 **Слои (снизу вверх)**
 
-1. Обложка в `.mask-wrapper`: фото фона, брендовый текст (растр), «Watch Trailer», кнопка play.
-2. CSS-маска на том же враппере: `mask-image` — брендовый SVG (`big-hero-text.svg`). Это дырка, не ещё один текстовый слой. Стартовый `mask-size` огромный (~3100–3500%), маска незаметна, видна вся обложка.
-3. Вспышка логотипа: тот же SVG как обычная картинка (`.overlay-logo`), старт `opacity: 0`.
-4. Полноэкранный блок даты продаж (Coming Soon: лого, «Coming May 26th 2026», PlayStation и Xbox). Скрыт **CSS-маской**, не через `opacity` / `display`.
+1. Обложка в `.mask-wrapper`: фото (portrait AVIF/WebP до 767px), брендовый текст (растр), «Watch Trailer», play (ссылка на YouTube).
+2. CSS-маска на враппере: `mask-image` — SVG (`big-hero-text.svg`). Стартовый `mask-size` ~3100–3500%.
+3. Вспышка лого (`.overlay-logo` в `.fake-logo-wrapper`), старт `opacity: 0`. **Только desktop** (`>1024px`): на mobile/tablet скрыта, шаг flash в timeline пропускается.
+4. Блок даты (Coming Soon: лого, **Coming November 19th 2026**, PlayStation и Xbox). Скрыт **CSS-маской**. Заголовок — fluid `clamp()` (`.gradient-title`).
 
-**Скролл:** секция прибита (`pin`). Прогресс ≈ **два экрана** (`end: '+=200%'`, `scrub: 2.5`). Пока пользователь скроллит, hero остаётся в кадре.
+**Скролл:** pin, прогресс ≈ **два экрана** (`end: '+=200%'`, `scrub: 2.5`).
 
-**Последовательность**
+**Последовательность** — как в EN: шаг 4 анимирует `maskSize` + `maskPosition` по `useHeroMaskSettings`; шаг 5 — overlay flash только на desktop.
 
-1. На загрузке показать обложку (фон, растровый бренд, подпись трейлера, play).
-2. Спрятать только хром обложки (`.fade-out`): слово, трейлер, play. **Фон оставить.**
-3. Уменьшить фон со стартового CSS-скейла (`md:scale-125`) до `1`.
-4. **Одновременно** с (3) уменьшить маску враппера с огромного размера до компактного (~20–50% по брейкпоинту). Фото читается только внутри силуэта букв GTA VI.
-5. Затем **параллельно**:
-   - погасить замаскированный враппер (`opacity: 0`);
-   - показать вспышку `.overlay-logo` до `opacity: 1` и снова спрятать;
-   - проявить Coming Soon, анимируя `mask-image` от нулевого радиального круга к  
-     `radial-gradient(circle at 50% 0vh, black 50%, transparent 100%)`.
-
-**Про «градиент»:** розово-оранжевая заливка «Coming May 26th» — только стиль заголовка. **radial-gradient** на `.entrance-message` — механизм показа: чёрное видно, прозрачное скрыто. Экран с датой проявляется кругом сверху. Это не декоративная подложка.
+**Про «градиент»:** розово-оранжевая заливка даты — стиль текста. **radial-gradient** на `.entrance-message` — механизм reveal.
 
 ---
 
@@ -112,17 +110,17 @@ Asset: `public/videos/output1.mp4`
 
 ### EN
 
-1. Full-viewport muted video. Starts pulled up over the hero (`margin-top` overlap) and at `opacity: 0`.
-2. Pin for about two viewports (`end: '+=200% top'`, `scrub: true`).
-3. Fade the hero out, then fade this section in.
-4. **In parallel** with the fade-in, scrub `video.currentTime` from `0` to duration so playback follows scroll, not `play()`.
+1. Full-viewport muted video. Starts pulled up over the hero (`margin-top`: `-80vh` mobile, `-150vh` desktop) and at `opacity: 0`.
+2. Pin for about two viewports (`start: 'top top'`, `end: '+=200% top'`, `scrub: true`, `refreshPriority: 2`).
+3. Fade the hero out (via scroll scene registry), then fade this section in.
+4. **In parallel** with the fade-in, scrub `video.currentTime` from `0` to duration.
 
 ### RU
 
-1. Полноэкранное видео без звука. Старт: нахлёст на hero (`margin-top`) и `opacity: 0`.
-2. Pin примерно на два экрана (`end: '+=200% top'`, `scrub: true`).
-3. Погасить hero, затем проявить эту секцию.
-4. **Параллельно** проявлению вести `video.currentTime` от `0` до длительности: кадры от скролла, не `play()`.
+1. Полноэкранное видео. Старт: нахлёст (`margin-top`: `-80vh` mobile, `-150vh` desktop) и `opacity: 0`.
+2. Pin ~два экрана (`start: 'top top'`, `end: '+=200% top'`, `scrub: true`, `refreshPriority: 2`).
+3. Погасить hero (через scroll scene registry), проявить секцию.
+4. **Параллельно** вести `currentTime` от `0` до длительности.
 
 ---
 
@@ -134,18 +132,19 @@ Assets: `public/images/jason/`
 ### EN
 
 1. Character page: name **Jason Duval**, tagline, bio, three photos (one in the copy column, two in `.img-box`).
-2. Section overlaps the first video (`margin-top` negative).
-3. As Jason enters, fade out the first video.
-4. Parallax: `.img-box` moves up on scrub (`y: -300`) while the user scrolls through the section.
-5. Photos keep the yellow crop frames and hover scale from CSS. No pin.
+2. **Stacked layout below `2xl` (1536px)**; two columns from `2xl` up (iPad / tablet stay stacked).
+3. Section overlaps the first video (`margin-top: -80vh`).
+4. As Jason enters (`start: 'top 40%'`, `end: '10% center'`, `scrub: 2`), fade out the first video section (registry target).
+5. Parallax: `.img-box` moves up on scrub (`y: -300`, `start: 'top center'`, `end: '80% center'`). No pin.
+6. Yellow crop frames and hover scale from CSS.
 
 ### RU
 
-1. Экран персонажа: имя **Jason Duval**, слоган, био, три фото (одно в колонке текста, два в `.img-box`).
-2. Секция нахлёстывается на первое видео (отрицательный `margin-top`).
-3. Когда Jason входит, первое видео гаснет.
-4. Параллакс: `.img-box` уезжает вверх по скроллу (`y: -300`).
-5. Жёлтые рамки и hover-scale из CSS сохранить. Pin не нужен.
+1. Экран **Jason Duval**, три фото.
+2. **Stacked до `2xl` (1536px)**; две колонки от `2xl` (iPad остаётся stacked).
+3. Нахлёст на первое видео (`margin-top: -80vh`).
+4. Fade первого видео по scroll (`top 40%` → `10% center`).
+5. Параллакс `.img-box` (`y: -300`). Pin нет.
 
 ---
 
@@ -156,15 +155,15 @@ Asset: `public/videos/output2.mp4`
 
 ### EN
 
-1. Full-viewport muted video (`object-position` toward the left/top). Class `lucia` is historical; keep a dedicated video class (`.second-vd`) for later fades.
-2. Starts overlapped and hidden (`opacity: 0`). Pin while the section is in view (`start: 'top top'`, `end: 'bottom top'`, `scrub: 2`).
-3. Fade the section in. **In parallel**, scrub `currentTime` to duration.
+1. Full-viewport muted video (`.second-vd`, `object-position` ~15% top). Section class `lucia` is historical.
+2. Same pin pattern as First video: overlap (`-80vh` / `-150vh`), `opacity: 0`, pin `start: 'top top'`, `end: '+=200% top'`, `scrub: true`, `refreshPriority: 2`.
+3. Fade section in; **in parallel**, scrub `currentTime` to duration.
 
 ### RU
 
-1. Полноэкранное видео без звука (кадр смещён влево/вверх). Класс `lucia` — наследие курса; для последующего fade оставить отдельный класс видео (`.second-vd`).
-2. Старт: нахлёст и `opacity: 0`. Pin, пока секция в кадре (`start: 'top top'`, `end: 'bottom top'`, `scrub: 2`).
-3. Проявить секцию. **Параллельно** вести `currentTime` до конца ролика.
+1. Полноэкранное видео (`.second-vd`). Класс секции `lucia` — наследие.
+2. Тот же pin, что First video: нахлёст, `opacity: 0`, `end: '+=200% top'`, `refreshPriority: 2`.
+3. Проявление + scrub `currentTime`.
 
 ---
 
@@ -175,17 +174,19 @@ Assets: `public/images/lucia/`
 
 ### EN
 
-1. Character page: name **Lucia Caminos**, tagline, two bio paragraphs, three photos (`.img-box` on one side, one photo in the copy column).
-2. Overlap the second video. As Lucia enters, fade `.second-vd` out.
-3. Parallax `.img-box` upward (`y: -200`) on scrub. No pin.
-4. Keep existing responsive copy (last paragraph hidden at some breakpoints).
+1. Character page: **Lucia Caminos**, tagline, two bio paragraphs, three photos.
+2. **Stacked below `2xl`**, two columns from `2xl`.
+3. Overlap second video (`margin-top: -80vh`). Fade **second video section** (registry), not a CSS class selector.
+4. Parallax `.img-box` upward (`y: -300`) — same as Jason. No pin.
+5. Last paragraph hidden at `md`, shown again at `xl` (`md:hidden xl:block`).
 
 ### RU
 
-1. Экран персонажа: имя **Lucia Caminos**, слоган, два абзаца био, три фото (`.img-box` с одной стороны, одно фото в колонке текста).
-2. Нахлёст на второе видео. На входе Lucia гасить `.second-vd`.
-3. Параллакс `.img-box` вверх (`y: -200`). Pin не нужен.
-4. Адаптив текста сохранить (последний абзац скрыт на части брейкпоинтов).
+1. Экран **Lucia Caminos**, три фото, два абзаца био.
+2. **Stacked до `2xl`**, две колонки от `2xl`.
+3. Нахлёст; fade секции second video через registry.
+4. Параллакс `y: -300` (как Jason).
+5. Последний абзац: `md:hidden xl:block`.
 
 ---
 
@@ -196,21 +197,19 @@ Assets: `public/images/postcard/overlay.webp`, `public/videos/postcard-vd.mp4`
 
 ### EN
 
-1. Centered postcard: gradient backdrop, video, frame overlay, CTA **Explore Leonida Keys**.
-2. Hover: slight rotate/scale; button tint to brand yellow.
-3. No pin. Scrub `currentTime` from `0` to duration while the section travels from `top center` to `bottom center`.
-4. CTA is a link to the official Leonida Keys page on rockstargames.com (opens in a new tab).
+1. Centered postcard: gradient backdrop (`.animated-gradient-bg`), media in `.post-card-media` (video + frame overlay at 3:2 aspect ratio), CTA **Explore Leonida Keys**.
+2. Wrapper `.post-card-wrapper`: side margins `mx-5` / `md:mx-12` / `xl:mx-56`. Media width `min(100%, calc(Nvh × 2560/1707))` — mobile `30vh`, tablet `50vh`, desktop `85vh`. CTA sits **outside** media overflow (`overflow-hidden` only on `.post-card-media`).
+3. Hover: slight rotate/scale on wrapper; button tint to brand yellow.
+4. No pin. Scrub `currentTime` from `0` to duration while the section travels `top center` → `bottom center`.
+5. CTA links to `https://www.rockstargames.com/VI/leonida-keys` (new tab).
 
 ### RU
 
-1. Открытка по центру: градиентный фон, видео, рамка-оверлей, CTA **Explore Leonida Keys**.
-2. Hover: лёгкий поворот/скейл; кнопка в брендовый жёлтый.
-3. Pin нет. Пока секция едет от `top center` до `bottom center`, вести `currentTime` от `0` до конца.
-4. CTA — ссылка на официальный раздел Leonida Keys на rockstargames.com (новая вкладка).
-
-The postcard backdrop gradient is decorative. It is not the Hero radial mask.
-
-Градиент под открыткой — декоративный фон. Это не радиальная маска Hero.
+1. Открытка: градиент, `.post-card-media` (видео + overlay 3:2), CTA.
+2. Отступы на wrapper; media с aspect-ratio и fluid width по `vh`; CTA вне `overflow-hidden` media.
+3. Hover: rotate/scale; кнопка в жёлтый.
+4. Pin нет; scrub `currentTime` (`top center` → `bottom center`).
+5. CTA — официальный Leonida Keys (новая вкладка).
 
 ---
 
@@ -221,17 +220,17 @@ Asset: `public/videos/output3.mp4`
 
 ### EN
 
-1. Full-viewport muted video, starts `opacity: 0` and slightly scaled up (CSS `scale-110`).
-2. Pin the section (`start: 'top top'`, `end: '90% top'`).
-3. Fade/scale content to visible (`opacity: 1`, `scale: 1`) as it enters. **In parallel**, scrub `currentTime` to duration.
-4. Do not keep an empty pin-only timeline if one pin+content timeline can do the job.
+1. Full-viewport muted video inside `.final-content`, starts `opacity: 0` and CSS `scale-110`.
+2. Pin (`start: 'top top'`, `end: '+=200%'`, `scrub: true`, `refreshPriority: -1`).
+3. Separate scrub trigger fades `.final-content` in (`start: 'top bottom'`, `end: 'top top'`) and scales to `1`.
+4. **In parallel** in pin timeline, scrub `currentTime` to duration. Empty hold at end of timeline (`duration: 3` padding).
 
 ### RU
 
-1. Полноэкранное видео без звука, старт `opacity: 0` и слегка увеличенный масштаб (CSS `scale-110`).
-2. Pin секции (`start: 'top top'`, `end: '90% top'`).
-3. Проявить контент (`opacity: 1`, `scale: 1`). **Параллельно** вести `currentTime` до конца.
-4. Пустой таймлайн «только ради pin» не нужен, если pin и контент живут в одном.
+1. Полноэкранное видео в `.final-content`, старт `opacity: 0`, `scale-110`.
+2. Pin (`start: 'top top'`, `end: '+=200%'`, `refreshPriority: -1`).
+3. Отдельный trigger проявляет `.final-content` (`top bottom` → `top top`) и `scale: 1`.
+4. **Параллельно** scrub `currentTime`; в конце timeline — padding.
 
 ---
 
@@ -242,17 +241,17 @@ Assets: `public/images/outro/`
 
 ### EN
 
-1. Same content as Hero Coming Soon: logo, **Coming May 26th 2026**, PlayStation and Xbox. Title uses the pink–orange **text** gradient only.
+1. Same content as Hero Coming Soon: logo, **Coming November 19th 2026**, PlayStation and Xbox. Title uses pink–orange **text** gradient (`.gradient-title` with `clamp()`).
 2. Starts overlapped on the final video (`margin-top: -100vh`) at `opacity: 0`.
-3. On scrub (`start: 'top 30%'`, `end: 'top 10%'`): fade final video out, fade this block in.
+3. On scrub (`start: 'top bottom'`, `end: 'top top'`): fade final video content out (registry target `finalContent`), fade this block in.
 4. No pin. No radial mask (unlike Hero).
 
 ### RU
 
-1. Тот же смысл, что Coming Soon в Hero: лого, **Coming May 26th 2026**, PlayStation и Xbox. Градиент заголовка — только заливка **текста**.
-2. Старт: нахлёст на финальное видео (`margin-top: -100vh`), `opacity: 0`.
-3. По скроллу (`start: 'top 30%'`, `end: 'top 10%'`): погасить финальное видео, проявить этот блок.
-4. Pin нет. Радиальной маски нет (в отличие от Hero).
+1. Как Coming Soon: лого, **Coming November 19th 2026**, PS / Xbox. Заголовок — text gradient + `clamp()`.
+2. Старт: `margin-top: -100vh`, `opacity: 0`.
+3. Scrub `top bottom` → `top top`: fade final video, проявить outro.
+4. Pin нет. Радиальной маски нет.
 
 ---
 
@@ -267,3 +266,4 @@ Assets: `public/images/outro/`
 7. Postcard  
 8. Final video  
 9. Outro  
+10. Site footer (unofficial disclaimer)
