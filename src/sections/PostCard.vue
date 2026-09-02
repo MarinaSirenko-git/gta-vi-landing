@@ -86,6 +86,7 @@ onUnmounted(() => {
     <div class="post-card-wrapper group transition duration-700 hover:rotate-1 hover:scale-[1.02]">
       <img src="/images/postcard/overlay.webp" alt="" />
 
+      <p id="postcard-video-desc" class="sr-only">Leonida Keys postcard clip.</p>
       <video
         ref="videoEl"
         muted
@@ -94,6 +95,7 @@ onUnmounted(() => {
         poster="/images/videos/postcard-poster.webp"
         src="/videos/postcard-vd.mp4"
         title="Leonida Keys postcard"
+        aria-describedby="postcard-video-desc"
       />
 
       <h2 id="postcard-heading" class="sr-only">Leonida Keys</h2>

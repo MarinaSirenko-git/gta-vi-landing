@@ -100,6 +100,7 @@ onUnmounted(() => {
 
 <template>
   <section ref="firstVideoSection" class="first-vd-wrapper" aria-label="Story trailer">
+    <p id="first-video-desc" class="sr-only">Jason story trailer.</p>
     <div class="h-dvh">
       <video
         ref="videoEl"
@@ -110,6 +111,7 @@ onUnmounted(() => {
         poster="/images/videos/first-video-poster.webp"
         src="/videos/output1.mp4"
         title="Grand Theft Auto VI story trailer"
+        aria-describedby="first-video-desc"
       />
     </div>
   </section>

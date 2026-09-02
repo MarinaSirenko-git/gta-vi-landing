@@ -42,6 +42,7 @@
           start: 'top 40%',
           end: '10% center',
           scrub: 2,
+          refreshPriority: 1,
         },
       })
 

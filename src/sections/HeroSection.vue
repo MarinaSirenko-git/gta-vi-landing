@@ -63,8 +63,6 @@ const setupAnimations = () => {
         scrub: 2.5,
         end: '+=200%',
         pin: true,
-        // Sections are set up out of page order (FirstVideo waits on video
-        // metadata), so pin spacing must be measured top-to-bottom.
         refreshPriority: 3,
       },
     })

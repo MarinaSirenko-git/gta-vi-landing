@@ -9,9 +9,9 @@ const { prefersReducedMotion } = usePrefersReducedMotion()
 const { width } = useViewportWidth()
 let ctx: gsap.Context | undefined
 
-const lusiaSection = ref<HTMLElement | null>(null)
+const luciaSection = ref<HTMLElement | null>(null)
 const videoEl = ref<HTMLVideoElement | null>(null)
-useRegisterScrollTarget('secondVideo', lusiaSection)
+useRegisterScrollTarget('secondVideo', luciaSection)
 
 const isMobile = computed(() => width.value <= 768)
 const overlap = computed(() => (isMobile.value ? '-80vh' : '-150vh'))
@@ -22,7 +22,7 @@ const killAnimations = () => {
 }
 
 const setupAnimations = () => {
-  const section = lusiaSection.value
+  const section = luciaSection.value
   const video = videoEl.value
 
   if (!section || !video) return
@@ -92,7 +92,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="lusiaSection" class="lucia" aria-label="Lucia story trailer">
+  <section ref="luciaSection" class="lucia" aria-label="Lucia story trailer">
+    <p id="second-video-desc" class="sr-only">Lucia story trailer.</p>
     <div class="h-dvh">
       <video
         ref="videoEl"
@@ -103,6 +104,7 @@ onUnmounted(() => {
         poster="/images/videos/second-video-poster.webp"
         src="/videos/output2.mp4"
         title="Lucia Caminos story trailer"
+        aria-describedby="second-video-desc"
         style="object-position: 15% 0%"
       />
     </div>

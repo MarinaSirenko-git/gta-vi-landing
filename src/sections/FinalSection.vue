@@ -98,6 +98,7 @@ onUnmounted(() => {
 
 <template>
   <section ref="finalSection" class="final" aria-label="Final trailer">
+    <p id="final-video-desc" class="sr-only">Final story trailer.</p>
     <div ref="finalContent" class="final-content size-full">
       <video
         ref="videoEl"
@@ -108,6 +109,7 @@ onUnmounted(() => {
         poster="/images/videos/final-video-poster.webp"
         src="/videos/output3.mp4"
         title="Grand Theft Auto VI final trailer"
+        aria-describedby="final-video-desc"
       />
     </div>
   </section>
