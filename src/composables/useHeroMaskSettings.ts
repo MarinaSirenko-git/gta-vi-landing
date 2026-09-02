@@ -6,8 +6,8 @@ export const useHeroMaskSettings = () => {
     return {
       initialMaskPos: '50% -1500vh',
       initialMaskSize: '3100% 3100%',
-      maskPos: '50% 7vh',
-      maskSize: '50% 50%',
+      maskPos: '50% 9.5rem',
+      maskSize: '15rem auto',
     }
   } else if (isTablet) {
     return {

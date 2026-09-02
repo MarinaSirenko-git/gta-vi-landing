@@ -106,7 +106,7 @@ main {
       @apply absolute top-1/2 left-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-white md:size-28;
     }
     .fake-logo-wrapper {
-      @apply absolute top-[9.5rem] left-1/2 z-50 -translate-x-1/2 sm:top-[12.8rem] md:top-[8.5rem] 2xl:top-44 3xl:top-48;
+      @apply absolute top-[9.5rem] left-1/2 z-50 hidden -translate-x-1/2 sm:top-[12.8rem] md:top-[8.5rem] lg:block 2xl:top-44 3xl:top-48;
     }
     .overlay-logo {
       @apply size-full w-60 object-cover opacity-0 md:w-60 2xl:w-72 3xl:w-80;
@@ -132,7 +132,7 @@ main {
   }
 
   .jason {
-    @apply relative z-10 mt-60 flex w-dvw flex-col justify-between gap-5 overflow-x-hidden py-40 ps-10 lg:flex-row lg:ps-40 2xl:ps-80;
+    @apply relative z-10 mt-60 flex w-dvw flex-col justify-between gap-5 overflow-x-hidden py-40 ps-10 2xl:flex-row 2xl:ps-40 3xl:ps-80;
 
     .character-name {
       @apply font-long mb-20 text-8xl text-yellow uppercase;
@@ -144,7 +144,7 @@ main {
       @apply pe-14 text-lg text-white md:pe-28 md:text-2xl;
     }
     .jason-1 {
-      @apply w-auto -translate-x-5 bg-yellow lg:h-[80vh];
+      @apply w-auto -translate-x-5 bg-yellow 2xl:h-[80vh];
 
       img {
         @apply size-full object-cover [object-position:5%_center] transition duration-700 ease-in-out hover:scale-[0.98];
@@ -171,7 +171,7 @@ main {
   }
 
   .lucia-life {
-    @apply relative z-10 mt-60 flex w-dvw flex-col justify-between gap-5 overflow-x-hidden py-40 lg:flex-row;
+    @apply relative z-10 mt-60 flex w-dvw flex-col justify-between gap-5 overflow-x-hidden py-40 2xl:flex-row;
 
     .character-name {
       @apply font-long mb-20 text-8xl text-yellow uppercase;
@@ -186,21 +186,21 @@ main {
       @apply block md:hidden xl:block;
     }
     .lucia-1 {
-      @apply w-auto -translate-x-5 bg-yellow lg:h-[80vh];
+      @apply w-auto -translate-x-5 bg-yellow 2xl:h-[80vh];
 
       img {
         @apply size-full object-cover [object-position:85%_center] transition duration-700 ease-in-out hover:scale-[0.98];
       }
     }
     .lucia-2 {
-      @apply my-20 w-[80%] translate-x-5 bg-yellow lg:h-[60vh] lg:w-[70%] lg:-translate-x-5 md:my-36;
+      @apply my-20 w-[80%] translate-x-5 bg-yellow md:my-36 2xl:h-[60vh] 2xl:w-[70%] 2xl:-translate-x-5;
 
       img {
         @apply size-full object-cover [object-position:50%_center] transition duration-700 ease-in-out hover:scale-x-[0.98] hover:scale-y-[0.98];
       }
     }
     .lucia-3 {
-      @apply h-auto w-auto -translate-x-5 bg-yellow lg:h-[90vh] md:w-[60%];
+      @apply h-auto w-auto -translate-x-5 bg-yellow md:w-[60%] 2xl:h-[90vh];
 
       img {
         @apply size-full object-cover [object-position:62%_center] transition duration-700 ease-in-out hover:scale-x-[0.98] hover:scale-y-[0.99];
@@ -216,20 +216,34 @@ main {
     }
 
     .post-card-wrapper {
+      @apply relative mx-5 w-full md:mx-12 xl:mx-56;
+    }
+
+    .post-card-media {
       aspect-ratio: 2560 / 1707;
-      @apply relative mx-5 flex h-[30vh] w-[min(100%,calc(30vh*2560/1707))] items-center justify-center overflow-hidden md:mx-12 md:h-[40vh] md:w-[min(100%,calc(40vh*2560/1707))] xl:mx-56 xl:h-[85vh] xl:w-[min(100%,calc(85vh*2560/1707))];
+      width: min(100%, calc(30vh * 2560 / 1707));
+      height: auto;
+      @apply relative mx-auto overflow-hidden;
+
+      @media (min-width: 48rem) {
+        width: min(100%, calc(50vh * 2560 / 1707));
+      }
+
+      @media (min-width: 80rem) {
+        width: min(100%, calc(85vh * 2560 / 1707));
+      }
 
       video {
-        @apply h-full w-full object-cover 2xl:scale-x-105;
+        @apply absolute inset-0 size-full object-cover 2xl:scale-x-105;
       }
 
       img {
         @apply absolute inset-0 z-10 size-full object-cover;
       }
+    }
 
-      a {
-        @apply absolute -bottom-28 left-1/2 w-2/3 -translate-x-1/2 cursor-pointer rounded-full bg-white px-5 py-4 text-center text-lg no-underline md:bottom-16 md:w-fit md:px-7;
-      }
+    .post-card-wrapper a {
+      @apply absolute -bottom-28 left-1/2 w-2/3 -translate-x-1/2 cursor-pointer rounded-full bg-white px-5 py-4 text-center text-lg text-black no-underline md:bottom-16 md:w-fit md:px-7;
     }
   }
 

@@ -3,12 +3,18 @@ import gsap from 'gsap'
 import { useHeroMaskSettings } from '@/composables/useHeroMaskSettings'
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useRegisterScrollTarget } from '@/composables/useScrollSceneRegistry'
+import { useViewportWidth } from '@/composables/useViewportWidth'
 import ComingSoon from './ComingSoon.vue'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 const TRAILER_URL = 'https://www.youtube.com/watch?v=VQRLujxTm3c'
 
-const { initialMaskPos, initialMaskSize, maskSize } = useHeroMaskSettings()
+const { width } = useViewportWidth()
+const isMobile = computed(() => width.value <= 768)
+const isTablet = computed(() => width.value > 768 && width.value <= 1024)
+const showOverlayFlash = computed(() => !isMobile.value && !isTablet.value)
+
+const { initialMaskPos, initialMaskSize, maskPos, maskSize } = useHeroMaskSettings()
 const { prefersReducedMotion } = usePrefersReducedMotion()
 const heroSection = ref<HTMLElement | null>(null)
 const playIcon = ref<HTMLImageElement | null>(null)
@@ -79,12 +85,15 @@ const setupAnimations = () => {
         '.mask-wrapper',
         {
           maskSize,
+          maskPosition: maskPos,
           ease: 'power1.inOut',
         },
         '<',
       )
       .to('.mask-wrapper', { opacity: 0, pointerEvents: 'none' })
-      .to(
+
+    if (showOverlayFlash.value) {
+      tl.to(
         '.overlay-logo',
         {
           opacity: 1,
@@ -94,7 +103,9 @@ const setupAnimations = () => {
         },
         '<',
       )
-      .to(
+    }
+
+    tl.to(
         '.entrance-message',
         {
           duration: 1,
@@ -119,10 +130,10 @@ onMounted(() => {
   setupAnimations()
 })
 
-watch(prefersReducedMotion, (reduced) => {
-  if (reduced) killAnimations()
+watch([prefersReducedMotion, isMobile, isTablet], () => {
+  if (prefersReducedMotion.value) killAnimations()
   applyInitialLayout()
-  if (!reduced) setupAnimations()
+  if (!prefersReducedMotion.value) setupAnimations()
 })
 
 onUnmounted(() => {

@@ -81,24 +81,26 @@ onUnmounted(() => {
     <div class="animated-gradient-bg" aria-hidden="true" />
 
     <div class="post-card-wrapper group transition duration-700 hover:rotate-1 hover:scale-[1.02]">
-      <img
-        src="/images/postcard/overlay.webp"
-        alt=""
-        width="2560"
-        height="1707"
-      />
+      <div class="post-card-media">
+        <img
+          src="/images/postcard/overlay.webp"
+          alt=""
+          width="2560"
+          height="1707"
+        />
 
-      <p id="postcard-video-desc" class="sr-only">Leonida Keys postcard clip.</p>
-      <video
-        ref="videoEl"
-        muted
-        playsinline
-        preload="none"
-        :src="videoSrc"
-        poster="/images/videos/postcard-poster.webp"
-        title="Leonida Keys postcard"
-        aria-describedby="postcard-video-desc"
-      />
+        <p id="postcard-video-desc" class="sr-only">Leonida Keys postcard clip.</p>
+        <video
+          ref="videoEl"
+          muted
+          playsinline
+          preload="none"
+          :src="videoSrc"
+          poster="/images/videos/postcard-poster.webp"
+          title="Leonida Keys postcard"
+          aria-describedby="postcard-video-desc"
+        />
+      </div>
 
       <h2 id="postcard-heading" class="sr-only">Leonida Keys</h2>
       <a
