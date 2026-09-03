@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { getHeroMaskSettings } from '@/composables/useHeroMaskSettings'
+import { getHeroMaskSettings, maskGsapProps } from '@/composables/useHeroMaskSettings'
 import { heroDebugLog } from '@/composables/useHeroDebugLog'
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useRegisterScrollTarget } from '@/composables/useScrollSceneRegistry'
@@ -90,10 +90,7 @@ const applyInitialLayout = () => {
       initialMaskSize,
     })
 
-    gsap.set('.mask-wrapper', {
-      maskPosition: initialMaskPos,
-      maskSize: initialMaskSize,
-    })
+    gsap.set('.mask-wrapper', maskGsapProps(initialMaskPos, initialMaskSize))
     heroDebugLog('applyInitialLayout:gsap.set-mask-done')
 
     gsap.set('.mask-logo', {
@@ -162,8 +159,7 @@ const setupAnimations = () => {
     tl.to(
       '.mask-wrapper',
       {
-        maskSize,
-        maskPosition: maskPos,
+        ...maskGsapProps(maskPos, maskSize),
         ease: 'power1.inOut',
       },
       '<',

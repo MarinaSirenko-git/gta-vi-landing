@@ -301,10 +301,10 @@ main {
 
 @media (max-width: 768px) {
   .mask-wrapper {
-    -webkit-mask-size: 3100% 3100%;
-    mask-size: 3100% 3100%;
-    -webkit-mask-position: 50% -1500vh;
-    mask-position: 50% -1500vh;
+    -webkit-mask-size: 10000px 10000px;
+    mask-size: 10000px 10000px;
+    -webkit-mask-position: 50% -9999px;
+    mask-position: 50% -9999px;
   }
 }
 
