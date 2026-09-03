@@ -107,7 +107,7 @@ onUnmounted(() => {
         :href="LEONIDA_KEYS_URL"
         target="_blank"
         rel="noopener noreferrer"
-        class="transition duration-700 group-hover:bg-yellow cursor-pointer z-10"
+        class="transition duration-700 group-hover:bg-yellow cursor-pointer z-10 text-nowrap"
         aria-label="Explore Leonida Keys on the official site (opens in a new tab)"
       >
         Explore Leonida Keys

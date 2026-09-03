@@ -1,4 +1,3 @@
-import '@/debug/captureEarlyState'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { createApp } from 'vue'
