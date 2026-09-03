@@ -5,20 +5,28 @@ function getViewportWidth(): number {
   return window.innerWidth
 }
 
+function getViewportHeight(): number {
+  if (typeof window === 'undefined') return 0
+  return window.innerHeight
+}
+
 /**
- * Tracks `window.innerWidth` and updates on resize.
+ * Tracks `window.innerWidth` / `innerHeight` and updates on resize.
  */
 export function useViewportWidth(): {
   width: Readonly<Ref<number>>
+  height: Readonly<Ref<number>>
 } {
   const width = ref(getViewportWidth())
+  const height = ref(getViewportHeight())
 
   if (typeof window === 'undefined') {
-    return { width: readonly(width) }
+    return { width: readonly(width), height: readonly(height) }
   }
 
   const onResize = () => {
-    width.value = window.innerWidth
+    width.value = getViewportWidth()
+    height.value = getViewportHeight()
   }
 
   window.addEventListener('resize', onResize)
@@ -27,5 +35,5 @@ export function useViewportWidth(): {
     window.removeEventListener('resize', onResize)
   })
 
-  return { width: readonly(width) }
+  return { width: readonly(width), height: readonly(height) }
 }

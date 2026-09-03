@@ -13,8 +13,8 @@ heroDebugLog('setup:imports-done')
 
 const TRAILER_URL = 'https://www.youtube.com/watch?v=VQRLujxTm3c'
 
-const { width } = useViewportWidth()
-heroDebugLog('setup:useViewportWidth', { width: width.value })
+const { width, height } = useViewportWidth()
+heroDebugLog('setup:useViewportWidth', { width: width.value, height: height.value })
 
 const isMobile = computed(() => width.value <= 768)
 const isTablet = computed(() => width.value > 768 && width.value <= 1024)
@@ -25,7 +25,7 @@ heroDebugLog('setup:breakpoints', {
   showOverlayFlash: showOverlayFlash.value,
 })
 
-const maskSettings = computed(() => getHeroMaskSettings(width.value))
+const maskSettings = computed(() => getHeroMaskSettings(width.value, height.value))
 heroDebugLog('setup:maskSettings-computed', maskSettings.value)
 
 const maskWrapperStyle = computed(() => ({
@@ -233,12 +233,13 @@ onMounted(() => {
   })
 })
 
-watch([prefersReducedMotion, isMobile, isTablet], () => {
+watch([prefersReducedMotion, isMobile, isTablet, height], () => {
   heroDebugLog('watch:breakpoint-or-motion', {
     prefersReducedMotion: prefersReducedMotion.value,
     isMobile: isMobile.value,
     isTablet: isTablet.value,
     width: width.value,
+    height: height.value,
   })
   if (prefersReducedMotion.value) killAnimations()
   applyInitialLayout()

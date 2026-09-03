@@ -5,9 +5,13 @@ export type HeroMaskSettings = {
   maskSize: string
 }
 
-/** px-based initial mask — Android WebView/Chromium mishandles mask-position with vh */
-const MOBILE_INITIAL_MASK_POS = '50% -9999px'
-const MOBILE_INITIAL_MASK_SIZE = '10000px 10000px'
+const MOBILE_INITIAL_MASK_SIZE = '3100% 3100%'
+
+/** ~1500vh as px — avoids Android mask-position + vh bugs while keeping % mask-size */
+function mobileInitialMaskPos(viewportHeight: number): string {
+  const offsetPx = Math.round(viewportHeight * 15)
+  return `50% -${offsetPx}px`
+}
 
 export function maskGsapProps(position: string, size: string) {
   return {
@@ -18,13 +22,13 @@ export function maskGsapProps(position: string, size: string) {
   }
 }
 
-export function getHeroMaskSettings(width: number): HeroMaskSettings {
+export function getHeroMaskSettings(width: number, height: number): HeroMaskSettings {
   const isMobile = width <= 768
   const isTablet = width > 768 && width <= 1024
 
   if (isMobile) {
     return {
-      initialMaskPos: MOBILE_INITIAL_MASK_POS,
+      initialMaskPos: mobileInitialMaskPos(height),
       initialMaskSize: MOBILE_INITIAL_MASK_SIZE,
       maskPos: '50% 9.5rem',
       maskSize: '15rem auto',

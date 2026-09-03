@@ -301,10 +301,9 @@ main {
 
 @media (max-width: 768px) {
   .mask-wrapper {
-    -webkit-mask-size: 10000px 10000px;
-    mask-size: 10000px 10000px;
-    -webkit-mask-position: 50% -9999px;
-    mask-position: 50% -9999px;
+    -webkit-mask-size: 3100% 3100%;
+    mask-size: 3100% 3100%;
+    /* position: set via Vue :style / GSAP — static vh/px values break on Android */
   }
 }
 
