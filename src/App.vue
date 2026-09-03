@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { provideScrollSceneRegistry } from '@/composables/useScrollSceneRegistry'
+import DebugBanner from '@/components/DebugBanner.vue'
 import NavBar from '@/sections/NavBar.vue'
 import HeroSection from '@/sections/HeroSection.vue'
 import FirstVideo from './sections/FirstVideo.vue'
@@ -29,4 +30,5 @@ provideScrollSceneRegistry()
   <footer class="site-footer black-gradient-bg">
     <p>Unofficial fan recreation, not affiliated with Rockstar Games / Take-Two</p>
   </footer>
+  <DebugBanner />
 </template>
