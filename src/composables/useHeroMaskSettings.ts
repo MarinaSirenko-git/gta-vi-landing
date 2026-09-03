@@ -1,6 +1,13 @@
-export const useHeroMaskSettings = () => {
-  const isMobile = window.innerWidth <= 768
-  const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024
+export type HeroMaskSettings = {
+  initialMaskPos: string
+  initialMaskSize: string
+  maskPos: string
+  maskSize: string
+}
+
+export function getHeroMaskSettings(width: number): HeroMaskSettings {
+  const isMobile = width <= 768
+  const isTablet = width > 768 && width <= 1024
 
   if (isMobile) {
     return {

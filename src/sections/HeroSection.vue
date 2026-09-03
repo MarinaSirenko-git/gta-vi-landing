@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { useHeroMaskSettings } from '@/composables/useHeroMaskSettings'
+import { getHeroMaskSettings } from '@/composables/useHeroMaskSettings'
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useRegisterScrollTarget } from '@/composables/useScrollSceneRegistry'
 import { useViewportWidth } from '@/composables/useViewportWidth'
@@ -14,7 +14,13 @@ const isMobile = computed(() => width.value <= 768)
 const isTablet = computed(() => width.value > 768 && width.value <= 1024)
 const showOverlayFlash = computed(() => !isMobile.value && !isTablet.value)
 
-const { initialMaskPos, initialMaskSize, maskPos, maskSize } = useHeroMaskSettings()
+const maskSettings = computed(() => getHeroMaskSettings(width.value))
+const maskWrapperStyle = computed(() => ({
+  WebkitMaskSize: maskSettings.value.initialMaskSize,
+  WebkitMaskPosition: maskSettings.value.initialMaskPos,
+  maskSize: maskSettings.value.initialMaskSize,
+  maskPosition: maskSettings.value.initialMaskPos,
+}))
 const { prefersReducedMotion } = usePrefersReducedMotion()
 const heroSection = ref<HTMLElement | null>(null)
 const playIcon = ref<HTMLImageElement | null>(null)
@@ -36,6 +42,8 @@ const applyInitialLayout = () => {
   layoutCtx?.revert()
 
   layoutCtx = gsap.context(() => {
+    const { initialMaskPos, initialMaskSize } = maskSettings.value
+
     gsap.set('.mask-wrapper', {
       maskPosition: initialMaskPos,
       maskSize: initialMaskSize,
@@ -62,6 +70,8 @@ const setupAnimations = () => {
   killAnimations()
 
   animationCtx = gsap.context(() => {
+    const { maskPos, maskSize } = maskSettings.value
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: heroSection.value,
@@ -146,7 +156,7 @@ onUnmounted(() => {
   <section ref="heroSection" id="top" class="hero-section" aria-labelledby="site-title">
     <h1 id="site-title" class="sr-only">Grand Theft Auto VI</h1>
 
-    <div class="mask-wrapper size-full">
+    <div class="mask-wrapper size-full" :style="maskWrapperStyle">
       <!-- object-cover crops the landscape art to ~26% of its width on phones,
            so narrow viewports get a pre-cropped portrait frame instead -->
       <picture class="contents">

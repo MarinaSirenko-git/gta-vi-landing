@@ -284,12 +284,37 @@ main {
 }
 
 .mask-wrapper {
+  -webkit-mask-image: url('/images/hero/big-hero-text.svg');
   mask-image: url('/images/hero/big-hero-text.svg');
+  -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
+  /* Huge initial mask so the full cover shows before JS/GSAP runs */
+  -webkit-mask-size: 3500% 3500%;
+  mask-size: 3500% 3500%;
+  -webkit-mask-position: 50% 22%;
+  mask-position: 50% 22%;
   /* mask-image creates a stacking context, so the play button can only be
      lifted above .entrance-message (z-20) through this wrapper */
   position: relative;
   z-index: 30;
+}
+
+@media (max-width: 768px) {
+  .mask-wrapper {
+    -webkit-mask-size: 3100% 3100%;
+    mask-size: 3100% 3100%;
+    -webkit-mask-position: 50% -1500vh;
+    mask-position: 50% -1500vh;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mask-wrapper {
+    -webkit-mask-size: 3500% 3500%;
+    mask-size: 3500% 3500%;
+    -webkit-mask-position: 50% -1700vh;
+    mask-position: 50% -1700vh;
+  }
 }
 
 .animated-gradient-bg {
