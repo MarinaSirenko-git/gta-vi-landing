@@ -30,7 +30,6 @@ let layoutCtx: gsap.Context | undefined
 let animationCtx: gsap.Context | undefined
 let playBounce: gsap.core.Timeline | undefined
 
-// The trailer link itself stays available with reduced motion — only the pulse is skipped.
 const bouncePlayIcon = () => {
   if (prefersReducedMotion.value) return
   playBounce?.restart()
@@ -154,8 +153,6 @@ onUnmounted(() => {
     <h1 id="site-title" class="sr-only">Grand Theft Auto VI</h1>
 
     <div class="mask-wrapper size-full" :style="maskWrapperStyle">
-      <!-- object-cover crops the landscape art to ~26% of its width on phones,
-           so narrow viewports get a pre-cropped portrait frame instead -->
       <picture class="contents">
         <source
           media="(max-width: 767px)"
