@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 import { getHeroMaskSettings, maskGsapProps } from '@/composables/useHeroMaskSettings'
+import { HERO_PORTRAIT_SIZES, heroPortraitSrcset } from '@/utils/heroPortrait'
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useRegisterScrollTarget } from '@/composables/useScrollSceneRegistry'
 import { useViewportWidth } from '@/composables/useViewportWidth'
@@ -156,12 +157,14 @@ onUnmounted(() => {
       <picture class="contents">
         <source
           media="(max-width: 767px)"
-          srcset="/images/hero/hero-bg-portrait.avif"
+          :srcset="heroPortraitSrcset('avif')"
+          :sizes="HERO_PORTRAIT_SIZES"
           type="image/avif"
         />
         <source
           media="(max-width: 767px)"
-          srcset="/images/hero/hero-bg-portrait.webp"
+          :srcset="heroPortraitSrcset('webp')"
+          :sizes="HERO_PORTRAIT_SIZES"
           type="image/webp"
         />
         <source srcset="/images/hero/hero-bg.avif" type="image/avif" />
@@ -171,6 +174,7 @@ onUnmounted(() => {
           width="3560"
           height="1826"
           fetchpriority="high"
+          :sizes="HERO_PORTRAIT_SIZES"
           class="scale-out"
         />
       </picture>

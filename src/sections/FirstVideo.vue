@@ -20,6 +20,11 @@ let ctx: gsap.Context | undefined
 
 const isMobile = computed(() => width.value <= 768)
 const overlap = computed(() => (isMobile.value ? '-80vh' : '-150vh'))
+const posterSrc = computed(() =>
+  isMobile.value
+    ? '/images/videos/first-video-poster-640.webp'
+    : '/images/videos/first-video-poster.webp',
+)
 
 const killAnimations = () => {
   ctx?.revert()
@@ -106,7 +111,7 @@ onUnmounted(() => {
         playsinline
         preload="none"
         :src="videoSrc"
-        poster="/images/videos/first-video-poster.webp"
+        :poster="posterSrc"
         title="Grand Theft Auto VI story trailer"
         aria-describedby="first-video-desc"
       />

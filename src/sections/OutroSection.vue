@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import SiteLogo from '@/components/SiteLogo.vue'
+import { SITE_LOGO_SIZES } from '@/utils/siteLogo'
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useScrollSceneTarget } from '@/composables/useScrollSceneRegistry'
 import gsap from 'gsap'
@@ -68,19 +70,11 @@ onUnmounted(() => {
 <template>
   <section ref="messageSection" class="final-message" aria-labelledby="outro-heading">
     <div class="col-center h-full gap-10">
-      <img
-        src="/images/outro/logo-480.webp"
-        srcset="
-          /images/outro/logo-240.webp 240w,
-          /images/outro/logo-320.webp 320w,
-          /images/outro/logo-480.webp 480w
-        "
-        sizes="(min-width: 768px) 288px, 208px"
+      <SiteLogo
         alt="Grand Theft Auto VI"
-        width="480"
-        height="321"
+        :sizes="SITE_LOGO_SIZES.outro"
+        image-class="w-52 md:w-72"
         loading="lazy"
-        class="w-52 md:w-72"
       />
 
       <h2 id="outro-heading" class="gradient-title">

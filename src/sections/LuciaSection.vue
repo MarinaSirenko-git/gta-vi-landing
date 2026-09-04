@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import CharacterImage from '@/components/CharacterImage.vue'
+  import { CHARACTER_IMAGE_SIZES } from '@/utils/characterImage'
   import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
   import { useViewportWidth } from '@/composables/useViewportWidth'
   import { useScrollSceneTarget } from '@/composables/useScrollSceneRegistry'
@@ -84,10 +86,14 @@
   <section ref="luciaSection" class="lucia-life" aria-labelledby="lucia-name">
     <div class="img-box mt-96 flex flex-col items-end gap-5 ps-10 2xl:w-1/2">
       <figure class="lucia-1">
-        <img src="/images/lucia/lucia-1.webp" alt="Lucia Caminos" />
+        <CharacterImage base-path="/images/lucia/lucia-1" alt="Lucia Caminos" />
       </figure>
       <figure class="lucia-3">
-        <img src="/images/lucia/lucia-3.webp" alt="Lucia Caminos in Leonida" />
+        <CharacterImage
+          base-path="/images/lucia/lucia-3"
+          alt="Lucia Caminos in Leonida"
+          :sizes="CHARACTER_IMAGE_SIZES.medium"
+        />
       </figure>
     </div>
 
@@ -105,7 +111,11 @@
       </div>
 
       <figure class="lucia-2">
-        <img src="/images/lucia/lucia-2.webp" alt="Lucia Caminos standing outdoors" />
+        <CharacterImage
+          base-path="/images/lucia/lucia-2"
+          alt="Lucia Caminos standing outdoors"
+          :sizes="CHARACTER_IMAGE_SIZES.wide"
+        />
       </figure>
 
       <p class="max-w-xl ps-10 2xl:ps-32">

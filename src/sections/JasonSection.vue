@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import CharacterImage from '@/components/CharacterImage.vue'
+import { CHARACTER_IMAGE_SIZES } from '@/utils/characterImage'
 import { usePrefersReducedMotion } from '@/composables/usePrefersReducedMotion'
 import { useViewportWidth } from '@/composables/useViewportWidth'
 import { useScrollSceneTarget } from '@/composables/useScrollSceneRegistry'
@@ -94,16 +96,26 @@ onUnmounted(() => {
       </p>
 
       <figure class="jason-2">
-        <img src="/images/jason/jason-2.webp" alt="Jason Duval" />
+        <CharacterImage
+          base-path="/images/jason/jason-2"
+          alt="Jason Duval"
+        />
       </figure>
     </div>
 
     <div class="img-box mt-96 min-w-0 space-y-5 2xl:w-1/2">
       <figure class="jason-1">
-        <img src="/images/jason/jason-1.webp" alt="Jason Duval leaning against a car" />
+        <CharacterImage
+          base-path="/images/jason/jason-1"
+          alt="Jason Duval leaning against a car"
+        />
       </figure>
       <figure class="jason-3">
-        <img src="/images/jason/jason-3.webp" alt="Jason Duval in Leonida" />
+        <CharacterImage
+          base-path="/images/jason/jason-3"
+          alt="Jason Duval in Leonida"
+          :sizes="CHARACTER_IMAGE_SIZES.medium"
+        />
       </figure>
     </div>
   </section>
