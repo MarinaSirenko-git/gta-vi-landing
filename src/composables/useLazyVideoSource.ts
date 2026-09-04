@@ -1,4 +1,4 @@
-import { nextTick, onMounted, onUnmounted, ref, type Ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
 
 type LazyVideoSourceOptions = {
   /** Load when the section is within this margin of the viewport. */
@@ -6,6 +6,8 @@ type LazyVideoSourceOptions = {
   /** Skip intersection waiting and assign src immediately (e.g. reduced motion). */
   loadImmediately?: () => boolean
 }
+
+const READY_EVENTS = ['loadedmetadata', 'loadeddata', 'durationchange', 'canplay'] as const
 
 function viewportMarginPx(rootMargin: string): number {
   const match = rootMargin.match(/^(-?\d+(?:\.\d+)?)(vh|%)/)
@@ -21,6 +23,14 @@ function isNearViewport(element: HTMLElement, marginPx: number): boolean {
   return rect.top < window.innerHeight + marginPx && rect.bottom > -marginPx
 }
 
+function isVideoScrubReady(video: HTMLMediaElement): boolean {
+  return (
+    video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA &&
+    Number.isFinite(video.duration) &&
+    video.duration > 0
+  )
+}
+
 export function useLazyVideoSource(
   sectionRef: Ref<HTMLElement | null>,
   videoRef: Ref<HTMLVideoElement | null>,
@@ -29,19 +39,24 @@ export function useLazyVideoSource(
   options: LazyVideoSourceOptions = {},
 ) {
   const videoSrc = ref<string | undefined>(undefined)
+  const isVideoReady = ref(false)
   const rootMargin = options.rootMargin ?? '150% 0px'
   let observer: IntersectionObserver | undefined
   let readyListener: (() => void) | undefined
   let loading = false
   let scrollListenerAttached = false
+  let observingStarted = false
 
   const marginPx = () => viewportMarginPx(rootMargin)
 
   const cleanupReadyListener = () => {
-    if (readyListener && videoRef.value) {
-      videoRef.value.removeEventListener('loadeddata', readyListener)
-      readyListener = undefined
+    const video = videoRef.value
+    if (readyListener && video) {
+      for (const event of READY_EVENTS) {
+        video.removeEventListener(event, readyListener)
+      }
     }
+    readyListener = undefined
   }
 
   const detachScrollListener = () => {
@@ -50,16 +65,31 @@ export function useLazyVideoSource(
     scrollListenerAttached = false
   }
 
-  const waitForFrames = (video: HTMLVideoElement) => {
+  const notifyWhenScrubReady = (video: HTMLVideoElement) => {
     cleanupReadyListener()
 
-    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    const tryNotify = () => {
+      if (!isVideoScrubReady(video) || isVideoReady.value) return false
+
+      cleanupReadyListener()
+      isVideoReady.value = true
       onReady()
-      return
+      return true
     }
 
-    readyListener = onReady
-    video.addEventListener('loadeddata', readyListener, { once: true })
+    if (tryNotify()) return
+
+    readyListener = () => {
+      tryNotify()
+    }
+
+    for (const event of READY_EVENTS) {
+      video.addEventListener(event, readyListener)
+    }
+
+    requestAnimationFrame(() => {
+      tryNotify()
+    })
   }
 
   const beginLoad = async () => {
@@ -69,15 +99,23 @@ export function useLazyVideoSource(
     videoSrc.value = src
     await nextTick()
 
-    const video = videoRef.value
+    let video = videoRef.value
     if (!video) {
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => resolve())
+      })
+      video = videoRef.value
+    }
+
+    if (!video) {
+      videoSrc.value = undefined
       loading = false
       return
     }
 
     video.preload = 'auto'
     video.load()
-    waitForFrames(video)
+    notifyWhenScrubReady(video)
     detachScrollListener()
     observer?.disconnect()
     observer = undefined
@@ -101,9 +139,13 @@ export function useLazyVideoSource(
     scrollListenerAttached = true
   }
 
-  onMounted(() => {
+  const startObserving = () => {
+    if (observingStarted) return
+
     const section = sectionRef.value
     if (!section || !videoRef.value) return
+
+    observingStarted = true
 
     if (options.loadImmediately?.()) {
       void beginLoad()
@@ -126,6 +168,18 @@ export function useLazyVideoSource(
 
     observer.observe(section)
     attachScrollListener()
+  }
+
+  onMounted(() => {
+    startObserving()
+
+    if (!observingStarted) {
+      const stop = watch([sectionRef, videoRef], () => {
+        startObserving()
+        if (observingStarted) stop()
+      })
+      onUnmounted(stop)
+    }
   })
 
   onUnmounted(() => {
@@ -134,5 +188,5 @@ export function useLazyVideoSource(
     cleanupReadyListener()
   })
 
-  return { videoSrc }
+  return { videoSrc, isVideoReady }
 }

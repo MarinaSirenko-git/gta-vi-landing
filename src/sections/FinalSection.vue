@@ -79,12 +79,13 @@ const onVideoReady = () => {
   setupAnimations()
 }
 
-const { videoSrc } = useLazyVideoSource(finalSection, videoEl, '/videos/output3.mp4', onVideoReady, {
+const { videoSrc, isVideoReady } = useLazyVideoSource(finalSection, videoEl, '/videos/output3.mp4', onVideoReady, {
   rootMargin: '150% 0px',
   loadImmediately: () => prefersReducedMotion.value,
 })
 
 watch(prefersReducedMotion, () => {
+  if (!isVideoReady.value) return
   setupAnimations()
 })
 

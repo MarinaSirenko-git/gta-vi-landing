@@ -62,12 +62,13 @@ const onVideoReady = () => {
   setupAnimations()
 }
 
-const { videoSrc } = useLazyVideoSource(postCardSection, videoEl, '/videos/postcard-vd.mp4', onVideoReady, {
+const { videoSrc, isVideoReady } = useLazyVideoSource(postCardSection, videoEl, '/videos/postcard-vd.mp4', onVideoReady, {
   rootMargin: '150% 0px',
   loadImmediately: () => prefersReducedMotion.value,
 })
 
 watch([prefersReducedMotion, isMobile], () => {
+  if (!isVideoReady.value) return
   setupAnimations()
 })
 
