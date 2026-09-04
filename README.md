@@ -100,7 +100,43 @@ npm run dev:cf
 
 ### Performance audit
 
-After deployment, run:
+Lighthouse scores for [production](https://gta-vi-landing.marina-sirenko1-80f.workers.dev/) (Chrome DevTools, incognito, September 2026).
+
+#### Desktop
+
+| Category | Score |
+| --- | ---: |
+| Performance | **100** |
+| Accessibility | **100** |
+| Best Practices | **100** |
+| SEO | **100** |
+
+| Metric | Value |
+| --- | ---: |
+| First Contentful Paint | 0.4 s |
+| Largest Contentful Paint | 0.7 s |
+| Total Blocking Time | 0 ms |
+| Cumulative Layout Shift | 0 |
+| Speed Index | 0.7 s |
+
+#### Mobile
+
+| Category | Score |
+| --- | ---: |
+| Performance | **90** |
+| Accessibility | **100** |
+| Best Practices | **100** |
+| SEO | **100** |
+
+| Metric | Value |
+| --- | ---: |
+| First Contentful Paint | 1.4 s |
+| Largest Contentful Paint | 3.4 s |
+| Total Blocking Time | 140 ms |
+| Cumulative Layout Shift | 0 |
+| Speed Index | 2.3 s |
+
+To re-run locally after deploy:
 
 ```txt
 user-run-web-perf-audit https://gta-vi-landing.marina-sirenko1-80f.workers.dev
@@ -212,7 +248,43 @@ npm run dev:cf
 
 ### Performance audit
 
-После деплоя:
+Lighthouse для [прода](https://gta-vi-landing.marina-sirenko1-80f.workers.dev/) (Chrome DevTools, инкогнито, сентябрь 2026).
+
+#### Desktop
+
+| Категория | Балл |
+| --- | ---: |
+| Performance | **100** |
+| Accessibility | **100** |
+| Best Practices | **100** |
+| SEO | **100** |
+
+| Метрика | Значение |
+| --- | ---: |
+| First Contentful Paint | 0.4 s |
+| Largest Contentful Paint | 0.7 s |
+| Total Blocking Time | 0 ms |
+| Cumulative Layout Shift | 0 |
+| Speed Index | 0.7 s |
+
+#### Mobile
+
+| Категория | Балл |
+| --- | ---: |
+| Performance | **90** |
+| Accessibility | **100** |
+| Best Practices | **100** |
+| SEO | **100** |
+
+| Метрика | Значение |
+| --- | ---: |
+| First Contentful Paint | 1.4 s |
+| Largest Contentful Paint | 3.4 s |
+| Total Blocking Time | 140 ms |
+| Cumulative Layout Shift | 0 |
+| Speed Index | 2.3 s |
+
+Повторный прогон после деплоя:
 
 ```txt
 user-run-web-perf-audit https://gta-vi-landing.marina-sirenko1-80f.workers.dev
